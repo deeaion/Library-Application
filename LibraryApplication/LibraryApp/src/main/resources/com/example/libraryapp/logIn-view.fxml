@@ -13,12 +13,11 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="750.0" prefWidth="1100.0" style="-fx-background-color: #d5c5ae;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libraryapp.Controller.LogInController">
    <children>
-      <ImageView blendMode="DARKEN" fitHeight="746.0" fitWidth="995.0" layoutX="-353.0" opacity="0.81" pickOnBounds="true" preserveRatio="true">
+      <ImageView blendMode="DARKEN" fitHeight="750.0" fitWidth="976.0" layoutX="-353.0" opacity="0.81" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@images/loginImage.jpeg" />
+            <Image url="@images/background/loginImage.jpeg" />
          </image>
          <effect>
             <ColorAdjust brightness="-0.23" contrast="0.13" hue="-0.17" saturation="-0.16" />
