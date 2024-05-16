@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="627.0" prefWidth="822.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libraryapp.Controller.librarian.LibrarianShowSubscriberController">
    <children>
       <VBox layoutX="90.0" layoutY="42.0" prefHeight="469.0" prefWidth="641.0" style="-fx-background-color: #47596f; -fx-border-color: #d5c5af; -fx-border-width: 5;">
@@ -164,7 +163,7 @@
                         <Font name="Agency FB" size="36.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="phone numeber" textFill="#d5ccbf">
+                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="phone number" textFill="#d5ccbf">
                      <font>
                         <Font name="Agency FB" size="36.0" />
                      </font>
