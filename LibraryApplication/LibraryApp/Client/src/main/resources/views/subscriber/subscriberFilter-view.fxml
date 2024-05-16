@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<ScrollPane hbarPolicy="NEVER" prefHeight="686.0" prefWidth="863.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.ViewControllers.subscriber.SubscriberFilterController">
+   <content>
+      <VBox prefHeight="746.0" prefWidth="849.0">
+         <children>
+            <HBox prefHeight="59.0" prefWidth="849.0" style="-fx-background-color: #fddcb5;">
+               <children>
+                  <Label prefHeight="59.0" prefWidth="170.0" text="FILTERED SEARCH">
+                     <font>
+                        <Font name="Agency FB" size="30.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="237.0" prefWidth="849.0" spacing="40.0">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="245.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="158.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/bookCover/Manga/BluePeriod_vol1.jpg" />
+                           </image>
+                        </ImageView>
+                        <Label text="Blue Period, Volume 1">
+                           <font>
+                              <Font name="Caviar Dreams Bold Italic" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label text="Yatora Yaguchi" />
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="245.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="158.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/bookCover/Manga/Naruto_vol72.jpg" />
+                           </image>
+                        </ImageView>
+                        <Label text="Blue Period, Volume 1">
+                           <font>
+                              <Font name="Caviar Dreams Bold Italic" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label text="Yatora Yaguchi" />
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="245.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="158.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/bookCover/Manga/BluePeriod_vol1.jpg" />
+                           </image>
+                        </ImageView>
+                        <Label text="Blue Period, Volume 1">
+                           <font>
+                              <Font name="Caviar Dreams Bold Italic" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label text="Yatora Yaguchi" />
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="245.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fitHeight="200.0" fitWidth="158.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/bookCover/Manga/BluePeriod_vol1.jpg" />
+                           </image>
+                        </ImageView>
+                        <Label text="Blue Period, Volume 1">
+                           <font>
+                              <Font name="Caviar Dreams Bold Italic" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label text="Yatora Yaguchi" />
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

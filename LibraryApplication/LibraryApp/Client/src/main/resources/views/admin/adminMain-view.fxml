@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="750.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libraryapp.Controller.admin.AdminMainController">
+   <children>
+      <BorderPane prefHeight="750.0" prefWidth="1100.0">
+         <top>
+            <AnchorPane prefHeight="54.0" prefWidth="1100.0" style="-fx-background-color: #cec6c3;" BorderPane.alignment="CENTER">
+               <children>
+                  <Label layoutX="14.0" layoutY="13.0" prefHeight="33.0" prefWidth="151.0" text="LOGGED IN AS:" />
+                  <Label layoutX="135.0" layoutY="21.0" text="\@admin" />
+                  <Button layoutX="990.0" layoutY="14.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="96.0" text="LOGOUT" />
+               </children>
+            </AnchorPane>
+         </top>
+         <left>
+            <AnchorPane prefHeight="696.0" prefWidth="215.0" style="-fx-background-color: #d4b2a7;" BorderPane.alignment="CENTER">
+               <children>
+                  <Button layoutX="33.0" layoutY="207.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="149.0" text="MANAGE SUBSCRIBERS" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font name="Agency FB" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="33.0" layoutY="312.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="149.0" text="MANAGE LIBRARIANS" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font name="Agency FB" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="33.0" layoutY="421.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="149.0" text="MANAGE BOOKS" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font name="Agency FB" size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+         </left>
+         <center>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
