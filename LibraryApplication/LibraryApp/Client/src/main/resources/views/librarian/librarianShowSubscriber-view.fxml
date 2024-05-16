@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="627.0" prefWidth="822.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libraryapp.Controller.librarian.LibrarianShowSubscriberController">
+   <children>
+      <VBox layoutX="90.0" layoutY="42.0" prefHeight="469.0" prefWidth="641.0" style="-fx-background-color: #47596f; -fx-border-color: #d5c5af; -fx-border-width: 5;">
+         <children>
+            <HBox prefHeight="39.0" prefWidth="641.0">
+               <children>
+                  <Label text="Credentials:" textFill="#d5c5af">
+                     <font>
+                        <Font name="Agency FB Bold" size="40.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="39.0" prefWidth="641.0">
+               <children>
+                  <Label text="SUBSCRIBER ID:" textFill="#312229">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="443.0" text="the id" textFill="#d5ccbf">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="39.0" prefWidth="641.0">
+               <children>
+                  <Label prefHeight="49.0" prefWidth="161.0" text="USERNAME:" textFill="#312229">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the username" textFill="#d5ccbf">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="39.0" prefWidth="641.0">
+               <children>
+                  <Label prefHeight="49.0" prefWidth="213.0" text="EMAIL:" textFill="#312229">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the date" textFill="#d5ccbf">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <Separator prefWidth="200.0" />
+            <HBox prefHeight="39.0" prefWidth="641.0">
+               <children>
+                  <Label text="Personal Information:" textFill="#d5c5af">
+                     <font>
+                        <Font name="Agency FB" size="40.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="39.0" prefWidth="641.0">
+               <children>
+                  <Label prefHeight="49.0" prefWidth="189.0" text="FIRST NAME:" textFill="#312229">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the first name" textFill="#d5ccbf">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="39.0" prefWidth="641.0">
+               <children>
+                  <Label prefHeight="49.0" prefWidth="189.0" text="LAST NAME:" textFill="#312229">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the last name" textFill="#d5ccbf">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="39.0" prefWidth="641.0">
+               <children>
+                  <Label prefHeight="49.0" prefWidth="213.0" text="DATE OF SUB:" textFill="#312229">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the date" textFill="#d5ccbf">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="39.0" prefWidth="641.0">
+               <children>
+                  <Label prefHeight="49.0" prefWidth="213.0" text="BIRTHDAY:" textFill="#312229">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the birthday" textFill="#d5ccbf">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="39.0" prefWidth="641.0">
+               <children>
+                  <Label prefHeight="49.0" prefWidth="213.0" text="CPN:" textFill="#312229">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the cpn/cnp" textFill="#d5ccbf">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="39.0" prefWidth="641.0">
+               <children>
+                  <Label prefHeight="49.0" prefWidth="213.0" text="ADDRESS:" textFill="#312229">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="address" textFill="#d5ccbf">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="39.0" prefWidth="641.0">
+               <children>
+                  <Label prefHeight="49.0" prefWidth="213.0" text="PHONE:" textFill="#312229">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="phone number" textFill="#d5ccbf">
+                     <font>
+                        <Font name="Agency FB" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
