@@ -3,6 +3,7 @@ package client.RestCommunication.services;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import common.model.BookInfo;
+import common.model.Enums.BookType;
 import common.model.Enums.Genre;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -27,7 +28,7 @@ public class ClientService {
         this.objectMapper = new ObjectMapper();
     }
 
-    public Map<Genre, List<BookInfo>> getTopBooksCategories() throws Exception {
+    public Map<BookType, List<BookInfo>> getTopBooksCategories() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(BASE_URL + "/top-books-categories"))
                 .GET()

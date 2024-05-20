@@ -4,6 +4,7 @@ import client.RestCommunication.ClientWebSocket;
 import client.RestCommunication.services.ClientService;
 import common.model.BookInfo;
 import common.model.CredentialsDTO;
+import common.model.Enums.BookType;
 import common.model.Enums.Genre;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -169,16 +170,16 @@ clientService.logout();
     private void loadTopBooksCategories() {
         CompletableFuture.runAsync(() -> {
             try {
-                Map<Genre, List<BookInfo>> topBooksCategories = clientService.getTopBooksCategories();
+                Map<BookType, List<BookInfo>> topBooksCategories = clientService.getTopBooksCategories();
                 Platform.runLater(() -> displayTopBooksCategories(topBooksCategories));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
     }
-    public void displayTopBooksCategories(Map<Genre, List<BookInfo>> topBooksCategories) {
+    public void displayTopBooksCategories(Map<BookType, List<BookInfo>> topBooksCategories) {
         VBoxMain.getChildren().clear();
-        List<String> genres =topBooksCategories.keySet().stream().map(Genre::toString).toList();
+        List<String> genres =topBooksCategories.keySet().stream().map(BookType::toString).toList();
 
         genres.forEach(genre -> {
             VBox genreBox = new VBox();
@@ -196,7 +197,7 @@ clientService.logout();
             hBox.setPrefHeight(245);
             hBox.setPrefWidth(827);
 
-            List<BookInfo> books = topBooksCategories.get(Genre.valueOf(genre)  );
+            List<BookInfo> books = topBooksCategories.get(BookType.valueOf(genre)  );
 
             if (books.isEmpty()) {
                 Label noBooksLabel = new Label("None at the moment");
@@ -224,7 +225,7 @@ clientService.logout();
 
                 if (books.size() > 3) {
                     Button viewMoreButton = new Button("View More");
-                    viewMoreButton.setOnAction(e -> loadMoreBooks(Genre.valueOf(genre)));
+                    viewMoreButton.setOnAction(e -> loadMoreBooks(BookType.valueOf(genre)));
                     hBox.getChildren().add(viewMoreButton);
                 }
 
@@ -238,10 +239,10 @@ clientService.logout();
 
     }
 
-    private void loadMoreBooks(Genre genre) {
+    private void loadMoreBooks(BookType genre) {
         CompletableFuture.runAsync(() -> {
             try {
-                List<BookInfo> books = clientService.filterBooksByCriteria(List.of("genre"), List.of(genre.toString()));
+                List<BookInfo> books = clientService.filterBooksByCriteria(List.of("type"), List.of(genre.toString()));
                 Platform.runLater(() -> displayMoreBooks(books));
             } catch (Exception e) {
                 e.printStackTrace();

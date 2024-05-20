@@ -26,7 +26,7 @@ public class ClientController {
     }
 
     @GetMapping("/top-books-categories")
-    public ResponseEntity<Map<Genre, List<BookInfo>>> getTopBooksCategories() {
+    public ResponseEntity<Map<BookType, List<BookInfo>>> getTopBooksCategories() {
         return ResponseEntity.ok(serviceClient.getTopBooksCategories());
     }
 
