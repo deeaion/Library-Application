@@ -17,7 +17,7 @@
 
 <AnchorPane prefHeight="750.0" prefWidth="1077.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.ViewControllers.subscriber.SubscriberMainController">
    <children>
-      <BorderPane layoutX="-6.0" prefHeight="750.0" prefWidth="1100.0">
+      <BorderPane fx:id="BoardPane" layoutX="-6.0" prefHeight="750.0" prefWidth="1100.0">
          <top>
             <AnchorPane prefHeight="49.0" prefWidth="1067.0" style="-fx-background-color: #312229;" BorderPane.alignment="CENTER">
                <children>
@@ -36,19 +36,19 @@
                         <Image url="@../images/icons/cart_nr.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="773.0" layoutY="5.0" text="0" textFill="WHITE" />
+                  <Label fx:id="txtNumberOfItems" layoutX="773.0" layoutY="5.0" text="0" textFill="WHITE" />
                   <Label layoutX="14.0" layoutY="6.0" prefHeight="31.0" prefWidth="59.0" text="SEARCH" textFill="WHITE">
                      <font>
                         <Font name="Angel wish Regular" size="19.0" />
                      </font>
                   </Label>
-                  <TextField layoutX="85.0" layoutY="10.0" prefHeight="33.0" prefWidth="437.0" promptText="e.g Tokyo Ghoul" />
-                  <ImageView fitHeight="38.0" fitWidth="42.0" layoutX="529.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+                  <TextField fx:id="searchBar" layoutX="85.0" layoutY="10.0" prefHeight="33.0" prefWidth="437.0" promptText="e.g Tokyo Ghoul" />
+                  <ImageView fx:id="searchBtn" fitHeight="38.0" fitWidth="42.0" layoutX="529.0" layoutY="9.0" onMouseClicked="#handleSearch" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/icons/search.png" />
                      </image>
                   </ImageView>
-                  <Button layoutX="946.0" layoutY="10.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="137.0" text="LOG OUT" />
+                  <Button fx:id="btnLogOut" layoutX="946.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleLogOut" prefHeight="33.0" prefWidth="137.0" text="LOG OUT" />
                </children>
             </AnchorPane>
          </top>
@@ -62,14 +62,14 @@
                               <Font size="23.0" />
                            </font>
                         </Label>
-                        <ImageView fitHeight="38.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="dropDownBtn" fitHeight="38.0" fitWidth="37.0" onMouseClicked="#handleDropDown" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/icons/dropdown.png" />
                            </image>
                         </ImageView>
                      </children>
                   </HBox>
-                  <ScrollPane layoutX="5.0" layoutY="37.0" prefHeight="661.0" prefWidth="195.0" style="-fx-background-color: #d5c5ae;">
+                  <ScrollPane fx:id="filterScrollPane" layoutX="5.0" layoutY="37.0" prefHeight="661.0" prefWidth="195.0" style="-fx-background-color: #d5c5ae;">
                      <content>
                         <VBox prefHeight="706.0" prefWidth="185.0" style="-fx-background-color: #d5c5ae;">
                            <children>
@@ -82,8 +82,8 @@
                                     </Label>
                                     <HBox prefHeight="26.0" prefWidth="185.0">
                                        <children>
-                                          <TextField prefHeight="19.0" prefWidth="146.0" promptText="e.g. Unordinary" />
-                                          <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                          <TextField fx:id="txtTitle" prefHeight="19.0" prefWidth="146.0" promptText="e.g. Unordinary" />
+                                          <ImageView fx:id="btnSearchTitle" fitHeight="26.0" fitWidth="31.0" onMouseClicked="#handleFilteredSearch" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/search_filter.png" />
                                              </image>
@@ -101,8 +101,8 @@
                                     </Label>
                                     <HBox prefHeight="26.0" prefWidth="185.0">
                                        <children>
-                                          <TextField prefHeight="19.0" prefWidth="146.0" promptText="e.g. Manhwa" />
-                                          <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                          <TextField fx:id="txtCategory" prefHeight="19.0" prefWidth="146.0" promptText="e.g. Manhwa" />
+                                          <ImageView fx:id="btnSearchCategory" fitHeight="26.0" fitWidth="31.0" onMouseClicked="#handleFilteredSearch" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/search_filter.png" />
                                              </image>
@@ -121,8 +121,8 @@
                                     </Label>
                                     <HBox prefHeight="26.0" prefWidth="185.0">
                                        <children>
-                                          <TextField prefHeight="19.0" prefWidth="146.0" promptText="e.g. Fargo" />
-                                          <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                          <TextField fx:id="txtAuthor" prefHeight="19.0" prefWidth="146.0" promptText="e.g. Fargo" />
+                                          <ImageView fx:id="btnSearchAuthor" fitHeight="26.0" fitWidth="31.0" onMouseClicked="#handleFilteredSearch" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/search_filter.png" />
                                              </image>
@@ -140,8 +140,8 @@
                                     </Label>
                                     <HBox prefHeight="26.0" prefWidth="185.0">
                                        <children>
-                                          <TextField prefHeight="19.0" prefWidth="146.0" promptText="e.g. Romance" />
-                                          <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                          <TextField fx:id="txtGenre" prefHeight="19.0" prefWidth="146.0" promptText="e.g. Romance" />
+                                          <ImageView fx:id="btnSearchGenre" fitHeight="26.0" fitWidth="31.0" onMouseClicked="#handleFilteredSearch" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/search_filter.png" />
                                              </image>
@@ -160,8 +160,8 @@
                                     </Label>
                                     <HBox prefHeight="26.0" prefWidth="185.0">
                                        <children>
-                                          <TextField prefHeight="19.0" prefWidth="146.0" promptText="e.g. Romance" text="e.g. Romania" />
-                                          <ImageView fitHeight="26.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                          <TextField fx:id="txtCountry" prefHeight="19.0" prefWidth="146.0" promptText="e.g. Romance" text="e.g. Romania" />
+                                          <ImageView fx:id="btnSearchOrigin" fitHeight="26.0" fitWidth="31.0" onMouseClicked="#handleFilteredSearch" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/icons/search_filter.png" />
                                              </image>
@@ -179,11 +179,11 @@
             </AnchorPane>
          </left>
          <center>
-            <ScrollPane hbarPolicy="NEVER" prefHeight="643.0" prefWidth="902.0" BorderPane.alignment="CENTER">
+            <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" prefHeight="643.0" prefWidth="902.0" BorderPane.alignment="CENTER">
                <content>
-                  <VBox prefHeight="733.0" prefWidth="893.0">
+                  <VBox fx:id="VBoxMain" prefHeight="733.0" prefWidth="893.0">
                      <children>
-                        <VBox prefHeight="291.0" prefWidth="854.0">
+                        <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="291.0" prefWidth="854.0">
                            <children>
                               <Label prefHeight="59.0" prefWidth="904.0" style="-fx-background-color: #fddcb5;" text="MANGA">
                                  <font>
@@ -352,7 +352,7 @@
                         <Font name="Angel wish Regular" size="18.0" />
                      </font>
                   </Label>
-                  <Label layoutX="911.0" layoutY="10.0" prefHeight="27.0" prefWidth="173.0" text="\@new" textFill="WHITE">
+                  <Label fx:id="txtNameOfUser" layoutX="911.0" layoutY="10.0" prefHeight="27.0" prefWidth="173.0" text="\@new" textFill="WHITE">
                      <font>
                         <Font name="Angel wish Regular" size="18.0" />
                      </font>

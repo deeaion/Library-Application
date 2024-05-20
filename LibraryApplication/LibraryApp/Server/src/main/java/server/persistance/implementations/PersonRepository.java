@@ -128,7 +128,7 @@ public class PersonRepository implements IPersonRepository {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.save(obj);
+            session.persist(obj);
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {

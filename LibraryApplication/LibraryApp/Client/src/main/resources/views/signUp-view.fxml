@@ -82,37 +82,43 @@
                                     <Font name="Gadugi" size="19.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txtFName11" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="39.0" prefWidth="469.0" style="-fx-background-color: #7796bb;" VBox.vgrow="SOMETIMES" />
+                              <TextField fx:id="txtFName" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="39.0" prefWidth="469.0" style="-fx-background-color: #7796bb;" VBox.vgrow="SOMETIMES" />
                               <Label text="LAST NAME*">
                                  <font>
                                     <Font name="Gadugi" size="19.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="txtLName11" alignment="CENTER_RIGHT" prefHeight="44.0" prefWidth="469.0" style="-fx-background-color: #7796bb;" />
+                              <TextField fx:id="txtLName" alignment="CENTER_RIGHT" prefHeight="45.0" prefWidth="469.0" style="-fx-background-color: #7796bb;" />
                               <Label text="BIRTHDAY">
                                  <font>
                                     <Font name="Gadugi" size="19.0" />
                                  </font>
                               </Label>
-                              <DatePicker prefHeight="36.0" prefWidth="459.0" />
+                              <DatePicker fx:id="pickerBirthday" prefHeight="36.0" prefWidth="459.0" />
                               <Label text="CPN*">
                                  <font>
                                     <Font name="Gadugi" size="19.0" />
                                  </font>
                               </Label>
-                              <PasswordField fx:id="txtPas11" alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="469.0" style="-fx-background-color: #7796bb;" />
+                              <TextField fx:id="txtCPN" alignment="CENTER_RIGHT" prefHeight="45.0" prefWidth="469.0" style="-fx-background-color: #7796bb;" />
                               <Label text="ADDRESS">
                                  <font>
                                     <Font name="Gadugi" size="19.0" />
                                  </font>
                               </Label>
-                              <PasswordField fx:id="txtConfPas11" alignment="CENTER_RIGHT" prefHeight="37.0" prefWidth="469.0" style="-fx-background-color: #7796bb;" />
+                              <TextField fx:id="txtAddress" alignment="CENTER_RIGHT" prefHeight="45.0" prefWidth="469.0" style="-fx-background-color: #7796bb;" />
                               <Label text="PHONE*">
                                  <font>
                                     <Font name="Gadugi" size="19.0" />
                                  </font>
                               </Label>
-                              <PasswordField fx:id="txtConfPas111" alignment="CENTER_RIGHT" prefHeight="37.0" prefWidth="469.0" style="-fx-background-color: #7796bb;" />
+                              <TextField fx:id="txtPhone" alignment="CENTER_RIGHT" prefHeight="45.0" prefWidth="469.0" style="-fx-background-color: #7796bb;" />
+                              <Label text="GENDER">
+                                 <font>
+                                    <Font name="Gadugi" size="19.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtGender" alignment="CENTER_RIGHT" prefHeight="45.0" prefWidth="469.0" style="-fx-background-color: #7796bb;" />
                            </children>
                            <effect>
                               <DropShadow />

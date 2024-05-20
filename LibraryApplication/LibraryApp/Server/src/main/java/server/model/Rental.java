@@ -7,6 +7,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "rental")
+@AttributeOverrides({
+        @AttributeOverride(name = "id", column = @Column(name = "rental_id"))
+})
 public class Rental extends Identifiable<Long>  {
     public Rental() {
     }
@@ -16,10 +19,10 @@ public class Rental extends Identifiable<Long>  {
     @Column(name="ended_at")
     private LocalDateTime ended_at;
     @ManyToOne
-    @JoinColumn(name="rented_by", referencedColumnName = "id")
+    @JoinColumn(name="rented_by", referencedColumnName = "user_id")
     private Credentials rented_by;
     @ManyToOne
-    @JoinColumn(name="retrieved_by", referencedColumnName = "id")
+    @JoinColumn(name="retrieved_by", referencedColumnName = "user_id")
     private Credentials retrieved_by;
     @ManyToMany
     @JoinTable(
