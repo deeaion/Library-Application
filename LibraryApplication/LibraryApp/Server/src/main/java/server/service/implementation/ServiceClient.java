@@ -15,6 +15,7 @@ import server.service.util.UniqueCodeGenerator;
 
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -56,7 +57,7 @@ public class ServiceClient implements IServiceClient {
         String salt=resultOfHashing[0];
         Credentials credentials=new Credentials(username,hashedPassword,email,salt);
         try{
-            credentialsRepository.add(credentials);
+           credentials= credentialsRepository.add(credentials);
         }
         catch (Exception e)
         {
@@ -64,7 +65,13 @@ public class ServiceClient implements IServiceClient {
         }
         try{
             String uniqueCode= UniqueCodeGenerator.generateUniqueCode(username);
-            Subscriber subscriber=new Subscriber(uniqueCode,FirstName,LastName,LocalDateTime.parse(birthday),gender,Address,Phone,CPN,credentials, LocalDateTime.now());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime dateTime = LocalDateTime.parse(birthday, formatter);
+            Person person=new Person(FirstName,LastName,dateTime,gender,Address,Phone,CPN);
+            person=personRepository.add(person);
+
+            Subscriber subscriber=new Subscriber(uniqueCode,FirstName,LastName,dateTime,gender,Address,Phone,CPN,credentials, LocalDateTime.now());
+            subscriber.setId(person.getId());
             subscriberRepository.add(subscriber);
         }
         catch (Exception e)
@@ -114,30 +121,83 @@ public class ServiceClient implements IServiceClient {
         for (Genre genre:Genre.values())
         {
             List<BookInfo> bookInfoForGenre=(List<BookInfo>)bookInfoRepository.findBookInfoByGenre(genre.toString());
-            for(BookInfo bookInfo:bookInfoForGenre)
+            if (bookInfoForGenre.isEmpty())
+            {
+                books.put(genre,new ArrayList<>());
+            }
+            else
+            {for(BookInfo bookInfo:bookInfoForGenre)
             {
                 bookInfosInteger.put(bookInfo,findNumberOfRentedUnits(bookInfo));
             }
            bookInfosInteger.entrySet().stream().sorted().limit(3).forEach(entry->{
                books.get(genre).add(entry.getKey());
-           });
+           });}
         }
+        books.forEach((key, value) -> {
+            System.out.println(key + ":" + value);
+        });
         return books;
 
     }
 
     @Override
-    public List<BookInfo> filterBooksBYCriteria(String criteria, String value) {
-        switch (criteria) {
-            case "author":
-                return (List<BookInfo>) bookInfoRepository.findBookInfoByAuthor(value);
-            case "title":
-                return (List<BookInfo>) bookInfoRepository.findBookInfoByTitle(value);
-            case "genre":
-                return (List<BookInfo>) bookInfoRepository.findBookInfoByGenre(value);
-            default:
-                return new ArrayList<>();
+    public List<BookInfo> filterBooksBYCriteria(List<String>criterias, List<String> values) {
+
+        List<BookInfo> bookInfos= (List<BookInfo>) bookInfoRepository.getAll();
+        List<BookInfo> result=new ArrayList<>();
+        for(BookInfo bookInfo:bookInfos)
+        {
+            boolean ok=true;
+            for(int i=0;i<criterias.size();i++)
+            {
+                if(criterias.get(i).equals("author"))
+                {
+                    if(!bookInfo.getAuthor().contains(values.get(i)))
+                    {
+                        ok=false;
+                        break;
+                    }
+                }
+                if(criterias.get(i).equals("title"))
+                {
+                    if(!bookInfo.getTitle().contains(values.get(i)))
+                    {
+                        ok=false;
+                        break;
+                    }
+                }
+                if(criterias.get(i).equals("genre"))
+                {
+                    if(!bookInfo.getGenre().toString().contains(values.get(i)))
+                    {
+                        ok=false;
+                        break;
+                    }
+                }
+                if(criterias.get(i).equals("publisher"))
+                {
+                    if(!bookInfo.getPublisher().contains(values.get(i)))
+                    {
+                        ok=false;
+                        break;
+                    }
+                }
+                if(criterias.get(i).equals("language"))
+                {
+                    if(!bookInfo.getLanguage().contains(values.get(i)))
+                    {
+                        ok=false;
+                        break;
+                    }
+                }
+            }
+            if(ok)
+            {
+                result.add(bookInfo);
+            }
         }
+        return result;
     }
 
     @Override

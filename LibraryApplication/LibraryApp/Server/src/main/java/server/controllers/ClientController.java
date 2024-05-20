@@ -1,6 +1,7 @@
 package server.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.model.BookInfo;
 import server.model.BasketItem;
@@ -19,67 +20,76 @@ public class ClientController {
     private IServiceClient serviceClient;
 
     @PostMapping("/register")
-    public void register(@RequestParam String username,
-                         @RequestParam String password,
-                         @RequestParam String conf_password,
-                         @RequestParam String email,
-                         @RequestParam String firstName,
-                         @RequestParam String lastName,
-                         @RequestParam String cpn,
-                         @RequestParam String address,
-                         @RequestParam String phone,
-                         @RequestParam String birthday,
-                         @RequestParam String gender) {
-        serviceClient.register(username, password, conf_password, email, firstName, lastName, cpn, address, phone, birthday, gender);
+    public ResponseEntity<Void> register(@RequestBody RegistrationData data) {
+        serviceClient.register(data.username, data.password, data.conf_password, data.email, data.firstName, data.lastName, data.cpn, data.address, data.phone, data.birthday, data.gender);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/top-books-categories")
-    public Map<Genre, List<BookInfo>> getTopBooksCategories() {
-        return serviceClient.getTopBooksCategories();
+    public ResponseEntity<Map<Genre, List<BookInfo>>> getTopBooksCategories() {
+        return ResponseEntity.ok(serviceClient.getTopBooksCategories());
     }
 
-    @GetMapping("/filter-books")
-    public List<BookInfo> filterBooksByCriteria(@RequestParam String criteria, @RequestParam String value) {
-        return serviceClient.filterBooksBYCriteria(criteria, value);
+    @PostMapping("/filter-books")
+    public List<BookInfo> filterBooksByCriteria(@RequestBody FilterRequest filterRequest) {
+        return serviceClient.filterBooksBYCriteria(filterRequest.getCriterias(), filterRequest.getValues());
     }
+
 
     @GetMapping("/search-books")
-    public List<BookInfo> searchBooks(@RequestParam String searchContent) {
-        return serviceClient.searchBooks(searchContent);
+    public ResponseEntity<List<BookInfo>> searchBooks(@RequestParam String searchContent) {
+        return ResponseEntity.ok(serviceClient.searchBooks(searchContent));
     }
 
     @GetMapping("/basket-items")
-    public List<BasketItem> getBasketItems(@RequestParam String username) {
-        return serviceClient.getBasketItems(username);
+    public ResponseEntity<List<BasketItem>> getBasketItems(@RequestParam String username) {
+        return ResponseEntity.ok(serviceClient.getBasketItems(username));
     }
 
     @GetMapping("/top-books-category")
-    public List<BookInfo> getTopBooksForCategory(@RequestParam BookType bookType) {
-        return serviceClient.getTopBooksForCategory(bookType);
+    public ResponseEntity<List<BookInfo>> getTopBooksForCategory(@RequestParam BookType bookType) {
+        return ResponseEntity.ok(serviceClient.getTopBooksForCategory(bookType));
     }
 
     @GetMapping("/books-genre")
-    public List<BookInfo> getBooksForGenre(@RequestParam Genre genre) {
-        return serviceClient.getBooksForGenre(genre);
+    public ResponseEntity<List<BookInfo>> getBooksForGenre(@RequestParam Genre genre) {
+        return ResponseEntity.ok(serviceClient.getBooksForGenre(genre));
     }
 
     @GetMapping("/books-type")
-    public List<BookInfo> getBooksForType(@RequestParam BookType bookType) {
-        return serviceClient.getBooksForType(bookType);
+    public ResponseEntity<List<BookInfo>> getBooksForType(@RequestParam BookType bookType) {
+        return ResponseEntity.ok(serviceClient.getBooksForType(bookType));
     }
 
     @PostMapping("/add-book-to-basket")
-    public void addBookToBasket(@RequestBody BookInfo book, @RequestParam int nrOfCopies, @RequestParam String username) {
+    public ResponseEntity<Void> addBookToBasket(@RequestBody BookInfo book, @RequestParam int nrOfCopies, @RequestParam String username) {
         serviceClient.addBookToBasket(book, nrOfCopies, username);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/remove-book-from-basket")
-    public void removeBookFromBasket(@RequestBody BookInfo book, @RequestParam String username) {
+    public ResponseEntity<Void> removeBookFromBasket(@RequestBody BookInfo book, @RequestParam String username) {
         serviceClient.removeBookFromBasket(book, username);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/update-book-quantity")
-    public void updateBookQuantity(@RequestBody BookInfo book, @RequestParam int quantity, @RequestParam String username) {
+    public ResponseEntity<Void> updateBookQuantity(@RequestBody BookInfo book, @RequestParam int quantity, @RequestParam String username) {
         serviceClient.updateBookQuantity(book, quantity, username);
+        return ResponseEntity.ok().build();
+    }
+
+    private static class RegistrationData {
+        public String username;
+        public String password;
+        public String conf_password;
+        public String email;
+        public String firstName;
+        public String lastName;
+        public String cpn;
+        public String address;
+        public String phone;
+        public String birthday;
+        public String gender;
     }
 }

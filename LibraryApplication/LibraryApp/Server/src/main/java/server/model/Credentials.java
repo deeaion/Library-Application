@@ -1,14 +1,24 @@
 package server.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name="usercredentials")
+@AttributeOverrides({
+        @AttributeOverride(name = "id", column = @Column(name = "user_id"))
+})
 public class Credentials extends Identifiable<Long>{
+    @Column(name="username")
     private String username;
+    @Column(name="password")
     private String password;
+    @Column(name="email")
     private String email;
+    @Column(name="seed")
     private String seed;
 
     public Credentials(String username, String password, String email, String seed) {
@@ -22,32 +32,16 @@ public class Credentials extends Identifiable<Long>{
 
     }
 
-    public String getUsername() {
-        return username;
-    }
-
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getSeed() {
-        return seed;
     }
 
     public void setSeed(String seed) {

@@ -8,6 +8,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name="bookinformation")
+@AttributeOverrides({
+        @AttributeOverride(name = "id", column = @Column(name = "bookinfo_id"))
+})
 public class BookInfo extends Identifiable<Long> {
     @Column(name = "title")
     private String title;

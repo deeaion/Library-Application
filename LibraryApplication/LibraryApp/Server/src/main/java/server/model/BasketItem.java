@@ -6,7 +6,9 @@ import java.util.Objects;
 
 @Entity
 @Table(name="basketitem")
-
+@AttributeOverrides({
+        @AttributeOverride(name = "id", column = @Column(name = "basket_id"))
+})
 public class BasketItem extends Identifiable<Long> {
     @ManyToOne
     @JoinColumn(name = "book_id") // Foreign key to BookInfo

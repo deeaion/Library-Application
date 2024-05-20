@@ -10,6 +10,8 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
+import server.model.Credentials;
+import server.model.Person;
 import server.model.Subscriber;
 import server.persistance.interfaces.ISubscriberRepository;
 import server.persistance.utils.DBUtils;
@@ -153,16 +155,15 @@ public class SubscriberRepository implements ISubscriberRepository {
         return Subscribers.get(0);
     }
 
-    @Override
     public Subscriber add(Subscriber obj) {
-        if(obj==null)
-            return null;
+        if (obj == null) return null;
         logger.traceEntry();
         Session session = getSession().openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.save(obj);
+            // Now save the subscriber part
+            session.merge(obj);
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
@@ -170,10 +171,7 @@ public class SubscriberRepository implements ISubscriberRepository {
             }
             logger.error("Error adding element in DB", e);
         } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
+            session.close();}
         logger.traceExit(obj);
         return obj;
     }

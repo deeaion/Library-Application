@@ -6,9 +6,12 @@ import server.model.Enums.StateOfRental;
 
 @Entity
 @Table(name = "book")
+@AttributeOverrides({
+        @AttributeOverride(name = "id", column = @Column(name = "book_id"))
+})
 public class Book extends Identifiable<Long> {
     @ManyToOne(cascade = CascadeType.ALL) // Assuming BookInfo is also a JPA entity
-    @JoinColumn(name = "information_id", referencedColumnName = "id", nullable = true)
+    @JoinColumn(name = "information_id", referencedColumnName = "bookinfo_id", nullable = true)
     private BookInfo bookInfo;
 
     @Column(name = "unique_code", length = 60, nullable = false, unique = true)

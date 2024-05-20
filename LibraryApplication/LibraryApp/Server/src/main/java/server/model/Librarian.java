@@ -1,16 +1,22 @@
 package server.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import server.model.Credentials;
 import server.model.Person;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 @Entity
+
 @Table(name = "librarian")
+//@PrimaryKeyJoinColumn(name = "id")
 public class Librarian extends Person {
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "credentials_id", referencedColumnName = "id")
+    @OneToOne
+    @JoinColumn(name = "credentials_id", referencedColumnName = "user_id")
     private Credentials credentials;
 
     @Column(name = "date_of_employment")
@@ -21,24 +27,12 @@ public class Librarian extends Person {
 
     // Getters and setters
 
-    public Credentials getCredentials() {
-        return credentials;
-    }
-
     public void setCredentials(Credentials credentials) {
         this.credentials = credentials;
     }
 
-    public LocalDateTime getHireDate() {
-        return hireDate;
-    }
-
     public void setHireDate(LocalDateTime hireDate) {
         this.hireDate = hireDate;
-    }
-
-    public String getUniqueCode() {
-        return uniqueCode;
     }
 
     public void setUniqueCode(String uniqueCode) {
