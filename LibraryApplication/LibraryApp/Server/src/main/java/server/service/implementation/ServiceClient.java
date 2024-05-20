@@ -114,32 +114,29 @@ public class ServiceClient implements IServiceClient {
         return count;
     }
     @Override
-    public Map<Genre, List<BookInfo>> getTopBooksCategories() {
-        Map<Genre,List<BookInfo>> books = new HashMap<>();
-        Map<BookInfo,Integer> bookInfosInteger=new HashMap<>();
-
-        for (Genre genre:Genre.values())
-        {
-            List<BookInfo> bookInfoForGenre=(List<BookInfo>)bookInfoRepository.findBookInfoByGenre(genre.toString());
-            if (bookInfoForGenre.isEmpty())
-            {
-                books.put(genre,new ArrayList<>());
+    public Map<BookType, List<BookInfo>> getTopBooksCategories() {
+        Map<BookType, List<BookInfo>> books = new HashMap<>();
+        for (BookType bookType : BookType.values()) {
+            books.put(bookType, new ArrayList<>()); // Initialize list for each BookType
+            try {
+                List<BookInfo> bookInfoForGenre = (List<BookInfo>) bookInfoRepository.findBookInfoByType(bookType.toString());
+                if (!bookInfoForGenre.isEmpty()) {
+                    Map<BookInfo, Integer> bookInfosInteger = new HashMap<>();
+                    for (BookInfo bookInfo : bookInfoForGenre) {
+                        bookInfosInteger.put(bookInfo, findNumberOfRentedUnits(bookInfo));
+                    }
+                    bookInfosInteger.entrySet().stream()
+                            .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())) // Sort by value in descending order
+                            .limit(3)
+                            .forEach(entry -> books.get(bookType).add(entry.getKey()));
+                }
+            } catch (Exception e) {
+                logger.error(e);
             }
-            else
-            {for(BookInfo bookInfo:bookInfoForGenre)
-            {
-                bookInfosInteger.put(bookInfo,findNumberOfRentedUnits(bookInfo));
-            }
-           bookInfosInteger.entrySet().stream().sorted().limit(3).forEach(entry->{
-               books.get(genre).add(entry.getKey());
-           });}
         }
-        books.forEach((key, value) -> {
-            System.out.println(key + ":" + value);
-        });
         return books;
-
     }
+
 
     @Override
     public List<BookInfo> filterBooksBYCriteria(List<String>criterias, List<String> values) {

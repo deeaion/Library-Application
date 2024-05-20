@@ -13,6 +13,7 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import server.model.BookInfo;
 import server.model.BookInfo;
+import server.model.Enums.BookType;
 import server.model.Enums.Genre;
 import server.persistance.interfaces.IBookInfoRepository;
 import server.persistance.utils.DBUtils;
@@ -278,7 +279,7 @@ public class BookInfoRepository implements IBookInfoRepository {
         List<String> attributes=new ArrayList<>();
         List<Object> values=new ArrayList<>();
         attributes.add("type");
-        values.add(string);
+        values.add(BookType.valueOf(string));
         return findAllUtil(attributes,values);
     }
 }
