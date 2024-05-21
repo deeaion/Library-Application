@@ -7,10 +7,8 @@ import javafx.stage.Stage;
 public class LibrarianMainController {
     private Stage stage;
     private CredentialsDTO credentials;
-    private ClientWebSocket clientWebSocket;
-    public void setLibrarian(Stage stage, CredentialsDTO credentials, ClientWebSocket clientWebSocket) {
+    public void setLibrarian(Stage stage, CredentialsDTO credentials) {
         this.stage = stage;
         this.credentials = credentials;
-        this.clientWebSocket = clientWebSocket;
     }
 }

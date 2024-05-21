@@ -1,6 +1,7 @@
 package client.RestCommunication;
 
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -16,19 +17,19 @@ import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class ClientWebSocket {
+public class WebSocketManager {
 
-    private static ClientWebSocket instance;
+    private static WebSocketManager instance;
     private StompSession session;
     private final CopyOnWriteArrayList<WebSocketMessageListener> listeners = new CopyOnWriteArrayList<>();
     private boolean connected = false;
 
-    private ClientWebSocket() {
+    private WebSocketManager() {
     }
 
-    public static ClientWebSocket getInstance() {
+    public static WebSocketManager getInstance() {
         if (instance == null) {
-            instance = new ClientWebSocket();
+            instance = new WebSocketManager();
         }
         return instance;
     }
@@ -45,7 +46,7 @@ public class ClientWebSocket {
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         try {
-            session = stompClient.connect(url, new StompSessionHandlerAdapter() {
+            session = stompClient.connectAsync(url, new StompSessionHandlerAdapter() {
                 @Override
                 public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
                     System.out.println("Connected to WebSocket at: " + url);
@@ -69,6 +70,13 @@ public class ClientWebSocket {
                 @Override
                 public void handleTransportError(StompSession session, Throwable exception) {
                     System.err.println("Transport error: " + exception.getMessage());
+                    exception.printStackTrace();
+                }
+
+                @Override
+                public void handleException(StompSession session, StompCommand command, StompHeaders headers, byte[] payload, Throwable exception) {
+                    System.err.println("Exception: " + exception.getMessage());
+                    exception.printStackTrace();
                 }
             }).get();
         } catch (InterruptedException | ExecutionException e) {

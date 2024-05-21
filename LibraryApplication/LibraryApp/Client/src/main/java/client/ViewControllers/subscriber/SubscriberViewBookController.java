@@ -1,6 +1,8 @@
 package client.ViewControllers.subscriber;
 
 import client.RestCommunication.ClientWebSocket;
+import client.RestCommunication.WebSocketManager;
+import client.RestCommunication.WebSocketMessageListener;
 import client.RestCommunication.services.ClientService;
 import common.model.BookInfo;
 import common.model.CredentialsDTO;
@@ -13,19 +15,18 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
-public class SubscriberViewBookController {
+public class SubscriberViewBookController implements WebSocketMessageListener {
     private BookInfo bookInfo;
-    private ClientWebSocket clientWebSocket;
     private ClientService clientService;
     private CredentialsDTO credentials;
 
-    public void setBook(BookInfo book, ClientWebSocket clientWebSocket, ClientService clientService, CredentialsDTO credentials) {
+    public void setBook(BookInfo book, ClientService clientService, CredentialsDTO credentials) {
         this.bookInfo = book;
-        this.clientWebSocket = clientWebSocket;
         this.clientService = clientService;
         this.credentials = credentials;
         setComponents();
         setBookInfo();
+        WebSocketManager.getInstance().addListener(this);
 //        subscribeToNotifications();''
 
     }
@@ -135,4 +136,10 @@ public class SubscriberViewBookController {
 
     }
 
-}}
+}
+
+    @Override
+    public void onMessageReceived(String message) {
+        System.out.println(message);
+    }
+}

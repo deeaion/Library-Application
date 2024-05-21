@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
@@ -9,10 +10,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="750.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.ViewControllers.subscriber.SubscriberCartController">
    <children>
-      <AnchorPane prefHeight="51.0" prefWidth="1100.0" style="-fx-background-color: #312229;">
+      <AnchorPane fx:id="btnBack" onMouseClicked="#handleGoMain" prefHeight="51.0" prefWidth="1100.0" style="-fx-background-color: #312229;">
          <children>
             <ImageView fitHeight="41.0" fitWidth="47.0" layoutX="14.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -21,19 +21,22 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <TableView layoutX="61.0" layoutY="127.0" prefHeight="403.0" prefWidth="978.0">
-        <columns>
-          <TableColumn prefWidth="492.00004959106445" text="Produs" />
-          <TableColumn minWidth="0.0" prefWidth="196.66668701171875" text="Nr.Of.Units" />
-            <TableColumn minWidth="0.0" prefWidth="288.0" text="Availability" />
-        </columns>
-      </TableView>
+      <ScrollPane hbarPolicy="NEVER" layoutX="61.0" layoutY="127.0">
+         <content>
+            <TableView fx:id="basketTable" prefHeight="381.0" prefWidth="985.0">
+              <columns>
+                <TableColumn fx:id="colProdus" prefWidth="790.6666145324707" text="Produs" />
+                <TableColumn fx:id="colUnits" minWidth="0.0" onEditCommit="#modifyNrOfUnits" prefWidth="186.66668701171875" text="Nr.Of.Units" />
+              </columns>
+            </TableView>
+         </content>
+      </ScrollPane>
       <Label layoutX="61.0" layoutY="75.0" prefHeight="41.0" prefWidth="342.0" text="BORROWING BASKET">
          <font>
             <Font name="Agency FB Bold" size="29.0" />
          </font>
       </Label>
-      <HBox layoutX="729.0" layoutY="551.0" prefHeight="41.0" prefWidth="311.0" style="-fx-background-color: #54101d;">
+      <HBox layoutX="729.0" layoutY="551.0" onMouseClicked="#handleFinishRent" prefHeight="41.0" prefWidth="311.0" style="-fx-background-color: #54101d;">
          <children>
             <Label prefHeight="63.0" prefWidth="271.0" text="FINISH CHOOSING THE BOOKS?" textFill="WHITE">
                <font>

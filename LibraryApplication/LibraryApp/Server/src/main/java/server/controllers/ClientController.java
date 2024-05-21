@@ -25,8 +25,12 @@ public class ClientController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/basket")
-    numberOfItemsInBasket(String username);
+    @GetMapping("/basketSize")
+    public int numberOfItemsInBasket(@PathVariable String username)
+    {
+        int nrOfItems = serviceClient.numberOfItemsInBasket(username);
+        return nrOfItems;
+    }
     @GetMapping("/stock/{id}")
     public ResponseEntity<Integer> getNrOfItemsInStock(@PathVariable Long id) {
         int nrOfItemsInStock = serviceClient.getNrOfItemsInStock(id);

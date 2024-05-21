@@ -24,11 +24,9 @@ public class SignUpController {
     private String URI_WebSocket = "ws://localhost:8080/websocket-endpoint";
     private String URI_REST = "http://localhost:55555/api/client/register";
     private Stage stage;
-    private ClientWebSocket clientWebSocket;
 
-    public void setSignUp(Stage stage, ClientWebSocket clientWebSocket) {
+    public void setSignUp(Stage stage) {
         this.stage = stage;
-        this.clientWebSocket = clientWebSocket;
         int i=16;
         sendRegistrationRequest("username", "password", "password", "email", "firstName", "lastName", "cpn", "address", "phone","2024-05-19 00:00:00","gender");
     }
@@ -97,7 +95,7 @@ public class SignUpController {
             e.printStackTrace();
         }
         LogInController logInController = loader.getController();
-        logInController.setLogIn(stage, clientWebSocket);
+        logInController.setLogIn(stage);
         stage.setScene(new Scene(root));
     }
 
