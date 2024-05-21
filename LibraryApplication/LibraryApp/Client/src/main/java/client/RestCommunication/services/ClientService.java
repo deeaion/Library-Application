@@ -16,6 +16,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -152,6 +153,23 @@ public class ClientService {
         if (response.statusCode() != 200) {
             throw new RuntimeException("Failed to add book to basket: " + response.body());
         }
+    }
+
+    public int getNrOfItemsInBasket(String username) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/basket/" + username))
+                .GET()
+                .build();
+        HttpResponse<String> response= null;
+        try {
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            return Integer.parseInt(response.body());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+           e.printStackTrace();
+        }
+        return response.statusCode();
     }
 }
 

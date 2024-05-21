@@ -8,6 +8,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Component
 public class ClientWebSocketHandler extends TextWebSocketHandler {
 
@@ -16,6 +17,7 @@ public class ClientWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         sessions.add(session);
+        System.out.println("WebSocket session established: " + session.getId());
     }
 
     @Override
@@ -26,13 +28,8 @@ public class ClientWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         sessions.remove(session);
+        System.out.println("WebSocket session closed: " + session.getId());
     }
 
-    public void broadcast(String message) throws Exception {
-        for (WebSocketSession session : sessions) {
-            if (session.isOpen()) {
-                session.sendMessage(new TextMessage(message));
-            }
-        }
-    }
+
 }

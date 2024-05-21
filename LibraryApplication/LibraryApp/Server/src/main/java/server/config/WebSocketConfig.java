@@ -1,23 +1,26 @@
 package server.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.*;
 
 @Configuration
-@EnableWebSocket
-public class WebSocketConfig implements WebSocketConfigurer {
-
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new AdminWebSocketHandler(), "/admin-websocket")
-                .setAllowedOrigins("*");
-        registry.addHandler(new LibrarianWebSocketHandler(), "/librarian-websocket")
-                .setAllowedOrigins("*");
-        registry.addHandler(new ClientWebSocketHandler(), "/client-websocket")
-                .setAllowedOrigins("*");
-
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic");
+        config.setApplicationDestinationPrefixes("/app");
+    }
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        String endpoint = "/client-websocket";
+        registry.addEndpoint(endpoint).addInterceptors(new CustomHandshakeInterceptor()).setAllowedOriginPatterns("*","ws://localhost:55555").withSockJS();
+        endpoint = "/librarian-websocket";
+        registry.addEndpoint(endpoint).setAllowedOriginPatterns("*","ws://localhost:55555").withSockJS();
+        endpoint = "/admin-websocket";
+        registry.addEndpoint(endpoint).setAllowedOriginPatterns("*","ws://localhost:55555").withSockJS();
     }
 
 

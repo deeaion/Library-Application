@@ -331,7 +331,10 @@ public class ServiceClient implements IServiceClient {
 
         // Notify
         try {
-            String notification=MessageFormat.format("Type:{0},Subscriber:{1}",NotificationRest.BASKETUPDATE.toString(), username);
+            System.out.println("Sending notification");
+            String notification=MessageFormat.format("Type:{0},Subscriber:{1}\r\n",NotificationRest.BASKETUPDATE.toString(), username);
+            System.out.println("Notification: " + notification);
+            notificationService.notifySubscribers(notification);
             notificationService.notifyAdmins(notification);
             notificationService.notifyLibrarians(notification);
         } catch (Exception e) {

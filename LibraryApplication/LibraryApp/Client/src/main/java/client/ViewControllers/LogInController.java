@@ -33,12 +33,11 @@ public class LogInController {
 
     @FXML
     private PasswordField txtPassword;
-
+    private ClientWebSocket clientWebSocket;
     @FXML
     private TextField txtUsername;
     private String URI_WebSocket = "ws://localhost:8080/websocket-endpoint";
     private String URI_REST = "http://localhost:55555/api/common/login";
-    private ClientWebSocket clientWebSocket;
     private Stage stage;
 
     @FXML
@@ -89,6 +88,7 @@ public class LogInController {
 
     }
     private void openLibrarianView() {
+
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/views/librarian/librarianMain-view.fxml"));
         Parent root= null;
@@ -98,7 +98,7 @@ public class LogInController {
             e.printStackTrace();
         }
         LibrarianMainController controller = fxmlLoader.<LibrarianMainController>getController();
-        controller.setLibrarian(stage, credentials,clientWebSocket);
+        controller.setLibrarian(stage, credentials);
         stage.setTitle("Librarian");
         stage.setScene(new Scene(root ));
         stage.show();
@@ -121,6 +121,7 @@ public class LogInController {
     }
 
     private void openUserView() {
+
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/views/subscriber/subscriberMain-view.fxml"));
         Parent root= null;
@@ -130,7 +131,7 @@ public class LogInController {
             e.printStackTrace();
         }
         SubscriberMainController controller = fxmlLoader.<SubscriberMainController>getController();
-        controller.setSubscriber(stage, credentials,clientWebSocket);
+        controller.setSubscriber(stage, credentials);
         stage.setTitle("Subscriber");
         stage.setScene(new Scene(root ));
         stage.show();
@@ -139,6 +140,7 @@ public class LogInController {
 
     @FXML
     void handleSignUp(ActionEvent event) {
+
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/views/signUp-view.fxml"));
         Parent root= null;
@@ -148,14 +150,14 @@ public class LogInController {
             e.printStackTrace();
         }
         SignUpController controller = fxmlLoader.<SignUpController>getController();
-        controller.setSignUp(stage,clientWebSocket);
+        controller.setSignUp(stage);
         stage.setTitle("Sign Up");
         stage.setScene(new Scene(root ));
         stage.show();
 
     }
 
-    public void setLogIn(Stage primaryStage, ClientWebSocket clientWebSocket) {
+    public void setLogIn(Stage primaryStage) {
         this.stage = primaryStage;
     }
 }

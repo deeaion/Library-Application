@@ -1,11 +1,15 @@
 package client.ViewControllers.subscriber;
-
 import client.RestCommunication.ClientWebSocket;
+import client.RestCommunication.NotificationManager;
+import client.RestCommunication.WebSocketManager;
+import client.RestCommunication.WebSocketMessageListener;
 import client.RestCommunication.services.ClientService;
+import client.RestCommunication.utils.ClientNotificationParser;
+import client.RestCommunication.utils.NotificationDetails;
 import common.model.BookInfo;
 import common.model.CredentialsDTO;
 import common.model.Enums.BookType;
-import common.model.Enums.Genre;
+import common.restCommon.NotificationRest;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,20 +32,37 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-public class SubscriberMainController {
+public class SubscriberMainController implements WebSocketMessageListener {
     private Stage stage;
     private CredentialsDTO credentials;
-    private ClientWebSocket clientWebSocket;
     private ClientService clientService;
-    public void setSubscriber(Stage stage, CredentialsDTO credentials, ClientWebSocket clientWebSocket) {
+    private boolean filterVisible = false;
+    public void setSubscriber(Stage stage, CredentialsDTO credentials) {
         this.stage = stage;
+        WebSocketManager.getInstance().addListener(this);
         this.credentials = credentials;
         this.txtNameOfUser.setText(credentials.getUsername());
-        this.clientWebSocket = clientWebSocket;
         this.clientService = new ClientService();
         loadTopBooksCategories();
         filterScrollPane.setVisible(false);
+        setBasketItemsCount();
     }
+    @FXML
+    public void initialize() {
+       }
+
+
+    private void setBasketItemsCount() {
+        CompletableFuture.runAsync(() -> {
+            try {
+                int count = clientService.getNrOfItemsInBasket(credentials.getUsername());
+                Platform.runLater(() -> txtNumberOfItems.setText(String.valueOf(count)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     @FXML
     public void handleSearch(MouseEvent event) {
         String searchContent = searchBar.getText();
@@ -165,8 +186,8 @@ public class SubscriberMainController {
 
     @FXML
     public void handleLogOut(ActionEvent event) {
-stage.close();
-clientService.logout();
+        stage.close();
+        clientService.logout();
         stage.close();
 
     }
@@ -182,6 +203,7 @@ clientService.logout();
     }
     public void displayTopBooksCategories(Map<BookType, List<BookInfo>> topBooksCategories) {
         VBoxMain.getChildren().clear();
+        filterVisible=false;
         List<String> genres =topBooksCategories.keySet().stream().map(BookType::toString).toList();
 
         genres.forEach(genre -> {
@@ -252,6 +274,7 @@ clientService.logout();
     private void loadMoreBooks(BookType genre) {
         CompletableFuture.runAsync(() -> {
             try {
+
                 List<BookInfo> books = clientService.filterBooksByCriteria(List.of("type"), List.of(genre.toString()));
                 Platform.runLater(() -> displayMoreBooks(books));
             } catch (Exception e) {
@@ -261,6 +284,7 @@ clientService.logout();
     }
 
     private void displayMoreBooks(List<BookInfo> books) {
+        filterVisible=true;
         VBoxMain.getChildren().clear();
         HBox hBoxHEader= new HBox();
         Label header = new Label("Search Results");
@@ -314,10 +338,37 @@ clientService.logout();
             e.printStackTrace();
         }
         SubscriberViewBookController controller = fxmlLoader.<SubscriberViewBookController>getController();
-        controller.setBook(book,clientWebSocket,clientService,credentials);
+        controller.setBook(book,clientService,credentials);
         stageBook.setTitle("Book Details");
        stageBook.setScene(new Scene(root ));
         stageBook.show();
+
+    }
+
+    @Override
+    public void onMessageReceived(String message) {
+
+        Platform.runLater(() -> {
+            System.out.println("Notification received: " + message);
+            NotificationDetails notificationDetails = ClientNotificationParser.parseNotifcation(message);
+            if(notificationDetails.getNotification().equals(NotificationRest.BASKETUPDATED))
+            {
+                setBasketItemsCount();
+            }
+            else
+                if(notificationDetails.getNotification().equals(NotificationRest.BOOKSADDED)||
+                        notificationDetails.getNotification().equals(NotificationRest.RENTMADE)
+                ||notificationDetails.getNotification().equals(NotificationRest.RENTRETURNED))
+                {
+                    if(!filterVisible)
+                    {
+                        loadTopBooksCategories();
+                    }
+                    else {
+                        handleFilterByCategory(null);
+                    }
+                }
+        });
 
     }
 }
