@@ -9,6 +9,9 @@ import common.model.Enums.Genre;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -208,7 +211,7 @@ clientService.logout();
                     VBox bookBox = new VBox();
                     bookBox.setPrefHeight(245);
                     bookBox.setPrefWidth(200);
-
+                    System.out.println(book.getImg()    );
                     ImageView bookImage = new ImageView(new Image(book.getImg()));
                     bookImage.setFitWidth(158);
                     bookImage.setFitHeight(200);
@@ -220,6 +223,13 @@ clientService.logout();
                     Label bookAuthor = new Label(book.getAuthor());
 
                     bookBox.getChildren().addAll(bookImage, bookTitle, bookAuthor);
+                    bookBox.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+                        try {
+                            showBookDetails(book);
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
+                        }
+                    });
                     hBox.getChildren().add(bookBox);
                 });
 
@@ -252,6 +262,14 @@ clientService.logout();
 
     private void displayMoreBooks(List<BookInfo> books) {
         VBoxMain.getChildren().clear();
+        HBox hBoxHEader= new HBox();
+        Label header = new Label("Search Results");
+        header.setStyle("-fx-font-size: 20px; -fx-font-weight: bold");
+        hBoxHEader.getChildren().add(header);
+        Button backBtn = new Button("Back");
+        backBtn.setOnAction(e -> loadTopBooksCategories());
+        hBoxHEader.getChildren().add(backBtn);
+        VBoxMain.getChildren().add(hBoxHEader);
        for (int i=0;i<books.size();i+=4){
            HBox hBox= new HBox();
            hBox.setPrefHeight(245);
@@ -264,17 +282,42 @@ clientService.logout();
                ImageView bookImage = new ImageView(new Image(books.get(j).getImg()));
                bookImage.setFitWidth(158);
                bookImage.setFitHeight(200);
-
-               Label bookTitle = new Label(books.get(j).getTitle());
+                BookInfo book = books.get(j);
+               Label bookTitle = new Label(book.getTitle());
                bookTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold");
                bookTitle.setFont(javafx.scene.text.Font.font("Caviar Dreams", 14));
 
-               Label bookAuthor = new Label(books.get(j).getAuthor());
+               Label bookAuthor = new Label(book.getAuthor());
 
                bookBox.getChildren().addAll(bookImage, bookTitle, bookAuthor);
+               bookBox.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+                   try {
+                       showBookDetails(book);
+                   } catch (Exception exception) {
+                       exception.printStackTrace();
+                   }
+               });
                hBox.getChildren().add(bookBox);
            }
            VBoxMain.getChildren().add(hBox);
        }
+    }
+
+    private void showBookDetails(BookInfo book) {
+        Stage stageBook = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/views/subscriber/subscriberViewBook-View.fxml"));
+        Parent root= null;
+        try {
+            root = fxmlLoader.load();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        SubscriberViewBookController controller = fxmlLoader.<SubscriberViewBookController>getController();
+        controller.setBook(book,clientWebSocket,clientService,credentials);
+        stageBook.setTitle("Book Details");
+       stageBook.setScene(new Scene(root ));
+        stageBook.show();
+
     }
 }

@@ -19,7 +19,6 @@ import server.persistance.utils.DBUtils;
 import java.util.ArrayList;
 import java.util.List;
 @Repository
-
 public class SubscriberRepository implements ISubscriberRepository {
 
     private DBUtils dbUtils;
@@ -53,37 +52,35 @@ public class SubscriberRepository implements ISubscriberRepository {
         return ses;
     }
 
-    public List<Subscriber> findAllUtil(List<String> attributes, List<Object> values) {
+    private List<Subscriber> findAllUtil(List<String> attributes, List<Object> values) {
         logger.traceEntry();
         Session session = getSession().openSession();
         Transaction tx = null;
-        List<Subscriber> Subscribers = new ArrayList<>();
+        List<Subscriber> subscribers = new ArrayList<>();
 
         try {
             tx = session.beginTransaction();
-            Query<Subscriber> query=null;
-            if(attributes.size()>0)
-            {
-                StringBuilder sql = new StringBuilder("from Subscriber where ");
-                //setez values
+            Query<Subscriber> query = null;
+            if (attributes.size() > 0) {
+                StringBuilder sql = new StringBuilder("from Subscriber s ");
+                sql.append("left join fetch s.shoppingBasket ");
+                sql.append("where ");
                 for (int i = 0; i < attributes.size(); i++) {
-                    sql.append(attributes.get(i)).append(" = :value").append(i);
+                    sql.append("s.").append(attributes.get(i)).append(" = :value").append(i);
                     if (i != attributes.size() - 1) {
                         sql.append(" and ");
                     }
                 }
 
-                query= session.createQuery(sql.toString(), Subscriber.class);
+                query = session.createQuery(sql.toString(), Subscriber.class);
                 for (int i = 0; i < values.size(); i++) {
                     query.setParameter("value" + i, values.get(i));
                 }
-            }
-            else
-            {
-                query = session.createQuery("from Subscriber", Subscriber.class);
+            } else {
+                query = session.createQuery("from Subscriber s left join fetch s.shoppingBasket", Subscriber.class);
             }
 
-            Subscribers = query.list();
+            subscribers = query.list();
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
@@ -96,8 +93,8 @@ public class SubscriberRepository implements ISubscriberRepository {
             }
         }
 
-        logger.traceExit(Subscribers);
-        return Subscribers;
+        logger.traceExit(subscribers);
+        return subscribers;
     }
     @Override
     public Subscriber findByUsername(String username) {
@@ -106,13 +103,13 @@ public class SubscriberRepository implements ISubscriberRepository {
             return null;
         }
         logger.traceEntry();
-        List<Subscriber> Subscribers = findAllUtil(List.of("credentials.username"), List.of(username));
-        if (Subscribers.size() == 0) {
+        List<Subscriber> subscribers = findAllUtil(List.of("credentials.username"), List.of(username));
+        if (subscribers.size() == 0) {
             logger.error("Error: Subscriber not found");
             return null;
         }
-        logger.traceExit(Subscribers.get(0));
-        return Subscribers.get(0);
+        logger.traceExit(subscribers.get(0));
+        return subscribers.get(0);
     }
 
     @Override
@@ -130,7 +127,6 @@ public class SubscriberRepository implements ISubscriberRepository {
         logger.traceExit(Subscribers.get(0));
         return Subscribers.get(0);
     }
-
     @Override
     public Subscriber findByCPN(String CPN) {
         if(CPN==null)
@@ -142,7 +138,6 @@ public class SubscriberRepository implements ISubscriberRepository {
         logger.traceExit(Subscribers.get(0));
         return Subscribers.get(0);
     }
-
     @Override
     public Subscriber findByUniqueCode(String uniqueCode) {
         if(uniqueCode==null)
@@ -154,7 +149,7 @@ public class SubscriberRepository implements ISubscriberRepository {
         logger.traceExit(Subscribers.get(0));
         return Subscribers.get(0);
     }
-
+    @Override
     public Subscriber add(Subscriber obj) {
         if (obj == null) return null;
         logger.traceEntry();
@@ -162,8 +157,13 @@ public class SubscriberRepository implements ISubscriberRepository {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            // Now save the subscriber part
-            session.merge(obj);
+            if (obj.getId() != null) {
+               session.merge(obj);
+            } else {
+                session.persist(obj);
+            }
+            session.flush();
+
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
@@ -171,11 +171,11 @@ public class SubscriberRepository implements ISubscriberRepository {
             }
             logger.error("Error adding element in DB", e);
         } finally {
-            session.close();}
+            session.close();
+        }
         logger.traceExit(obj);
         return obj;
     }
-
     @Override
     public Subscriber remove(Long aLong) {
         if(aLong==null)
@@ -202,7 +202,6 @@ public class SubscriberRepository implements ISubscriberRepository {
         logger.traceExit(subscriber);
         return subscriber;
     }
-
     @Override
     public Subscriber update(Subscriber obj) {
         if(obj==null)
@@ -239,7 +238,6 @@ public class SubscriberRepository implements ISubscriberRepository {
         logger.traceExit(Subscribers.get(0));
         return Subscribers.get(0);
     }
-
     @Override
     public Iterable<Subscriber> getAll() {
         logger.traceEntry();

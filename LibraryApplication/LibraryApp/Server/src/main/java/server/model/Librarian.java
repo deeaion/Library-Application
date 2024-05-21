@@ -13,14 +13,21 @@ import java.time.LocalDateTime;
 @Entity
 
 @Table(name = "librarian")
-//@PrimaryKeyJoinColumn(name = "id")
-public class Librarian extends Person {
+
+@AttributeOverrides({
+        @AttributeOverride(name = "id", column = @Column(name = "librarian_id"))
+})
+public class Librarian extends Identifiable<Long> {
     @OneToOne
     @JoinColumn(name = "credentials_id", referencedColumnName = "user_id")
     private Credentials credentials;
 
     @Column(name = "date_of_employment")
     private LocalDateTime hireDate;
+
+    @OneToOne
+    @JoinColumn(name = "librarian_id",referencedColumnName = "person_id")
+    private Person person;
 
     @Column(name = "unique_code", unique = true, length = 50)
     private String uniqueCode;

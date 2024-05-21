@@ -14,14 +14,14 @@
 <AnchorPane prefHeight="554.0" prefWidth="781.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.ViewControllers.subscriber.SubscriberViewBookController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#bdcbd9" height="423.0" layoutX="23.0" layoutY="44.0" stroke="BLACK" strokeType="INSIDE" width="295.0" />
-      <ImageView fitHeight="393.0" fitWidth="278.0" layoutX="34.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imgImage" fitHeight="393.0" fitWidth="278.0" layoutX="34.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/bookCover/Manhwa/VillainsAreDestinedToDie_vol1.jpg" />
          </image>
       </ImageView>
       <VBox layoutX="357.0" layoutY="21.0" prefHeight="468.0" prefWidth="409.0">
          <children>
-            <Label prefHeight="58.0" prefWidth="409.0" text="VIllains Are Destined to Die" wrapText="true">
+            <Label fx:id="txtTitle" prefHeight="58.0" prefWidth="409.0" text="VIllains Are Destined to Die" wrapText="true">
                <font>
                   <Font name="Century Gothic Bold Italic" size="23.0" />
                </font>
@@ -33,7 +33,7 @@
                         <Font name="Agency FB Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="24.0" prefWidth="341.0" text="category name" textFill="#47596f">
+                  <Label fx:id="txtCategory" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="24.0" prefWidth="341.0" text="category name" textFill="#47596f">
                      <font>
                         <Font name="Agency FB" size="20.0" />
                      </font>
@@ -47,14 +47,14 @@
                         <Font name="Agency FB Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" contentDisplay="BOTTOM" prefHeight="24.0" prefWidth="362.0" text="author name" textFill="#47596f">
+                  <Label fx:id="txtAuthor" alignment="CENTER_RIGHT" contentDisplay="BOTTOM" prefHeight="24.0" prefWidth="362.0" text="author name" textFill="#47596f">
                      <font>
                         <Font name="Agency FB" size="20.0" />
                      </font>
                   </Label>
                </children>
             </HBox>
-            <HBox prefHeight="35.0" prefWidth="409.0">
+            <HBox fx:id="txtISBC" prefHeight="35.0" prefWidth="409.0">
                <children>
                   <Label prefHeight="24.0" prefWidth="61.0" text="ISBC:">
                      <font>
@@ -75,7 +75,7 @@
                         <Font name="Agency FB Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" contentDisplay="BOTTOM" prefHeight="24.0" prefWidth="362.0" text="language of book" textFill="#47596f">
+                  <Label fx:id="txtLanguage" alignment="CENTER_RIGHT" contentDisplay="BOTTOM" prefHeight="24.0" prefWidth="362.0" text="language of book" textFill="#47596f">
                      <font>
                         <Font name="Agency FB" size="20.0" />
                      </font>
@@ -89,7 +89,7 @@
                         <Font name="Agency FB Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" contentDisplay="BOTTOM" prefHeight="24.0" prefWidth="362.0" text="genre of book" textFill="#47596f">
+                  <Label fx:id="txtGenre" alignment="CENTER_RIGHT" contentDisplay="BOTTOM" prefHeight="24.0" prefWidth="362.0" text="genre of book" textFill="#47596f">
                      <font>
                         <Font name="Agency FB" size="20.0" />
                      </font>
@@ -103,7 +103,7 @@
                         <Font name="Agency FB Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" contentDisplay="BOTTOM" prefHeight="24.0" prefWidth="362.0" text="publisher of book" textFill="#47596f">
+                  <Label fx:id="txtPublisher" alignment="CENTER_RIGHT" contentDisplay="BOTTOM" prefHeight="24.0" prefWidth="362.0" text="publisher of book" textFill="#47596f">
                      <font>
                         <Font name="Agency FB" size="20.0" />
                      </font>
@@ -117,7 +117,7 @@
                         <Font name="Agency FB Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Label alignment="TOP_LEFT" contentDisplay="BOTTOM" prefHeight="201.0" prefWidth="321.0" text="Description" textFill="#47596f">
+                  <Label fx:id="txtDescription" alignment="TOP_LEFT" contentDisplay="BOTTOM" prefHeight="201.0" prefWidth="321.0" text="Description" textFill="#47596f">
                      <font>
                         <Font name="Agency FB" size="20.0" />
                      </font>
@@ -129,8 +129,8 @@
       <HBox alignment="CENTER" layoutX="375.0" layoutY="493.0" prefHeight="59.0" prefWidth="400.0" spacing="10.0">
          <children>
             <Label prefHeight="37.0" prefWidth="87.0" text="NR.OF UNITS:" />
-            <Spinner />
-            <Button mnemonicParsing="false" prefHeight="48.0" prefWidth="141.0" text="ADD TO CART" />
+            <Spinner fx:id="nrOfUnitsSpinner" />
+            <Button fx:id="btnAddToCart" mnemonicParsing="false" onAction="#handleAddToCart" prefHeight="48.0" prefWidth="141.0" text="ADD TO CART" />
          </children>
       </HBox>
    </children>

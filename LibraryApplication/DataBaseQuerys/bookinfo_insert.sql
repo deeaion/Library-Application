@@ -167,7 +167,106 @@ INSERT INTO BookInformation (
     12
 );
 
+-- Insert Book Information for Omniscient Reader’s Viewpoint: Volume 1
+INSERT INTO BookInformation (
+    title, 
+    isbn, 
+    publisher, 
+    author, 
+    language, 
+    description, 
+    main_genre, 
+    type, 
+    img_url, 
+    nr_of_copies
+) VALUES (
+    'Omniscient Reader’s Viewpoint: Volume 1', 
+    '9781949980802', 
+    'Redice Studio', 
+    'singNsong, Sleepy-C', 
+    'English', 
+    'Kim Dokjas ordinary life is turned upside down when his favorite web novel becomes a reality.', 
+    'FANTASY', 
+    'MANHWA', 
+    'views/images/bookCover/Manhwa/OmniscientReadersViewpoint_vol1.jpg', 
+    5
+) RETURNING bookinfo_id;
+
+-- Insert Book Information for Solo Leveling: Volume 1
+INSERT INTO BookInformation (
+    title, 
+    isbn, 
+    publisher, 
+    author, 
+    language, 
+    description, 
+    main_genre, 
+    type, 
+    img_url, 
+    nr_of_copies
+) VALUES (
+    'Solo Leveling: Volume 1', 
+    '9781975319274', 
+    'Yen Press', 
+    'Chugong, Dubu (Redice Studio)', 
+    'English', 
+    'Sung Jin-Woo, an E rank hunter, becomes the worlds strongest after a near-death experience.', 
+    'FANTASY', 
+    'MANHWA', 
+    'views/images/bookCover/Manhwa/SoloLeveling_vol1.jpg', 
+    7
+) RETURNING bookinfo_id;
+
+-- Insert Book Information for Unordinary: Volume 1
+INSERT INTO BookInformation (
+    title, 
+    isbn, 
+    publisher, 
+    author, 
+    language, 
+    description, 
+    main_genre, 
+    type, 
+    img_url, 
+    nr_of_copies
+) VALUES (
+    'Unordinary: Volume 1', 
+    '9781427867208', 
+    'WEBTOON Unscrolled', 
+    'uru-chan', 
+    'English', 
+    'John Doe hides his true powers in a world where abilities define social status.', 
+    'SUPERHERO', 
+    'MANHWA', 
+    'views/images/bookCover/Manhwa/Unordinary_vol1.jpg', 
+    6
+) RETURNING bookinfo_id;
+
+-- Insert Book Information for Villains Are Destined to Die: Volume 1
+INSERT INTO BookInformation (
+    title, 
+    isbn, 
+    publisher, 
+    author, 
+    language, 
+    description, 
+    main_genre, 
+    type, 
+    img_url, 
+    nr_of_copies
+) VALUES (
+    'Villains Are Destined to Die: Volume 1', 
+    '9781939424459', 
+    'Tappytoon', 
+    'Gwon Gyeoeul, SUOL', 
+    'English', 
+    'A modern girl wakes up as a doomed villainess from her favorite otome game.', 
+    'FANTASY', 
+    'MANHWA', 
+    'views/images/bookCover/Manhwa/VillainsAreDestinedToDie_vol1.jpg', 
+    8
+) RETURNING bookinfo_id;
 
 
-
+select * from bookinformation
 

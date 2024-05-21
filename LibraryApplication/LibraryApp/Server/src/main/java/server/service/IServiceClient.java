@@ -9,8 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 public interface IServiceClient {
+    public int numberOfItemsInBasket(String username);
     void register(String username,String password,String conf_password,String email,String FirstName,String LastName,String CPN,String Address,String City,String PostalCode,String Phone);
     Map<BookType, List<BookInfo>> getTopBooksCategories();
+    public int getNrOfItemsInStock(Long id);
+    public int getQuantityOfBookInBasket(BookInfo bookInfo,String username);
+    public int getBooksInBasket(String username);
     List<BookInfo> filterBooksBYCriteria(List<String> criterias, List<String> values);
     List<BookInfo> searchBooks(String searchContent);
     List<BasketItem> getBasketItems(String username);

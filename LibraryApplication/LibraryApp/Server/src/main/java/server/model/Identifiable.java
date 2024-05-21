@@ -20,6 +20,12 @@ public abstract class Identifiable<T extends Serializable> {
     public Identifiable() {
     }
 
+    @Override
+    public String toString() {
+        return "Identifiable{" +
+                "id=" + id +
+                '}';
+    }
 
     public T getId() {
         return id;
