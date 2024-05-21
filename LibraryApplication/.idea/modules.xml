@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Client.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Client.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Server/LibraryApp.Server.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Server/LibraryApp.Server.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/LibraryApplication.iml" filepath="$PROJECT_DIR$/.idea/LibraryApplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Server.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Server.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1522235229/common.Server.Common.main.iml" filepath="$PROJECT_DIR$/.idea/modules/-1522235229/common.Server.Common.main.iml" />

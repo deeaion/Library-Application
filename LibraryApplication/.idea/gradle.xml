@@ -9,7 +9,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/LibraryApp" />
+            <option value="$PROJECT_DIR$/LibraryApp/Client" />
             <option value="$PROJECT_DIR$/LibraryApp/Common" />
+            <option value="$PROJECT_DIR$/LibraryApp/Server" />
           </set>
         </option>
       </GradleProjectSettings>

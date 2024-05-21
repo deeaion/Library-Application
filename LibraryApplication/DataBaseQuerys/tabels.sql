@@ -12,9 +12,20 @@ insert into UserCredentials (username,password,email,seed) values('admin','$2a$1
 UPDATE UserCredentials
 SET password = 'weV7YLyx8YBjz5GkbMc4iCeisvwh6QNn1EJsg4CCsqw=', seed = 'hDuDvIXCK2CcItIOpaGpHg=='
 WHERE user_id = 2;
-
+ select s1_0.subscriber_id,c1_0.user_id,c1_0.email,c1_0.password,c1_0.seed,c1_0.username,s1_0.date_of_subscription,p1_0.person_id,
+ p1_0.address,p1_0.birthday,p1_0.cpn,p1_0.first_name,p1_0.gender,p1_0.last_name,p1_0.phone,s1_0.unique_code,cr1_0.subscriber_id,
+ cr1_1.rental_id,cr1_1.ended_at,r1_0.user_id,r1_0.email,r1_0.password,r1_0.seed,r1_0.username,r2_0.user_id,r2_0.email,
+ r2_0.password,r2_0.seed,r2_0.username,cr1_1.started_at 
+ from subscriber s1_0 
+ left join usercredentials c1_0 on c1_0.user_id=s1_0.credentials_id
+ join person p1_0 on p1_0.person_id=s1_0.subscriber_id 
+ left join CurrentRentals cr1_0 on s1_0.subscriber_id=cr1_0.subscriber_id
+ left join rental cr1_1 on cr1_1.rental_id=cr1_0.rental_id l
+ eft join usercredentials r1_0 on r1_0.user_id=cr1_1.rented_by left join usercredentials r2_0 on r2_0.user_id=cr1_1.retrieved_by where s1_0.subscriber_id=?
+Hibernate: select c1_0.user_id,c1_0.email,c1_0.password,c1_0.seed,c1_0.username from usercredentials c1_0 where c1_0.user_id=?
 insert into UserCredentials (username,password,email,seed) values('ana','$2a$10$OOXvhhyG6pTiOVik3h5.S.Kuk9mQUYfDCOLt3PO4q1wyHfTGLNS9W','ana','$2a$10$OOXvhhyG6pTiOVik3h5.S.');
-
+select * from person
+select * from subscriber
 select * from UserCredentials;
 CREATE TABLE UserCredentials (
     user_id BIGSERIAL PRIMARY KEY,

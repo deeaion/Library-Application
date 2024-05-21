@@ -6,14 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.config.NotificationService;
 import server.model.*;
+
 import server.model.Enums.BookType;
 import server.model.Enums.Genre;
+import server.model.Enums.StateOfRental;
 import server.persistance.implementations.*;
+import server.restCommon.NotificationRest;
 import server.service.IServiceClient;
 import server.service.util.PasswordEncryption;
 import server.service.util.UniqueCodeGenerator;
 
 import java.security.NoSuchAlgorithmException;
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -38,53 +42,110 @@ public class ServiceClient implements IServiceClient {
     private RentalRepository rentalRepository;
     private final Logger logger = LogManager.getLogger(ServiceClient.class);
     @Override
-    public void register(String username, String password, String conf_password, String email, String FirstName, String LastName, String CPN, String Address, String Phone,String birthday,String gender) {
-        if(!Objects.equals(password, conf_password))
+    public int getNrOfItemsInStock(Long id)
+    {
+        BookInfo bookInfo=bookInfoRepository.get(id);
+        List<Book> books= (List<Book>) bookRepository.getAll();
+        int count=0;
+        for(Book book:books)
         {
+            if(book.getBookInfo().equals(bookInfo) && book.getState()== StateOfRental.NOT_RENTED)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+    @Override
+    public int getBooksInBasket(String username)
+    {
+        Subscriber subscriber= (Subscriber) subscriberRepository.findByUsername(username);
+        return subscriber.getShoppingBasket().size();
+    }
+    @Override
+    public int getQuantityOfBookInBasket(BookInfo bookInfo,String username)
+    {
+        Subscriber subscriber= (Subscriber) subscriberRepository.findByUsername(username);
+        List<BasketItem> basketItems=subscriber.getShoppingBasket();
+        for(BasketItem basketItem:basketItems)
+        {
+            if(basketItem.getBook().equals(bookInfo))
+            {
+                return basketItem.getQuantity();
+            }
+        }
+        return 0;
+    }
+    @Override
+    public int numberOfItemsInBasket(String username)
+    {
+        Subscriber subscriber= (Subscriber) subscriberRepository.findByUsername(username);
+        int count=0;
+        for(BasketItem basketItem:subscriber.getShoppingBasket())
+        {
+            count+=basketItem.getQuantity();
+        }
+        return count;
+    }
+    public void register(String username, String password, String conf_password, String email, String firstName, String lastName, String cpn, String address, String phone, String birthday, String gender) {
+        if (!Objects.equals(password, conf_password)) {
             try {
                 notificationService.notifySubscribers("Passwords do not match");
             } catch (Exception e) {
                 logger.error(e);
             }
+            return;
         }
-        String[] resultOfHashing= new String[0];
+
+        String[] resultOfHashing;
         try {
             resultOfHashing = PasswordEncryption.hashPassword(password);
         } catch (NoSuchAlgorithmException e) {
             logger.error(e);
+            return;
         }
-        String hashedPassword=resultOfHashing[1];
-        String salt=resultOfHashing[0];
-        Credentials credentials=new Credentials(username,hashedPassword,email,salt);
-        try{
-           credentials= credentialsRepository.add(credentials);
-        }
-        catch (Exception e)
-        {
-            logger.error(e);
-        }
-        try{
-            String uniqueCode= UniqueCodeGenerator.generateUniqueCode(username);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime dateTime = LocalDateTime.parse(birthday, formatter);
-            Person person=new Person(FirstName,LastName,dateTime,gender,Address,Phone,CPN);
-            person=personRepository.add(person);
 
-            Subscriber subscriber=new Subscriber(uniqueCode,FirstName,LastName,dateTime,gender,Address,Phone,CPN,credentials, LocalDateTime.now());
-            subscriber.setId(person.getId());
-            subscriberRepository.add(subscriber);
-        }
-        catch (Exception e)
-        {
-            logger.error(e);
-        }
+        String hashedPassword = resultOfHashing[1];
+        String salt = resultOfHashing[0];
+        Credentials credentials = new Credentials(username, hashedPassword, email, salt);
         try {
-            notificationService.notifyAdmins("New subscriber registered: "+username);
+            credentials = credentialsRepository.add(credentials);
         } catch (Exception e) {
             logger.error(e);
+            return;
+        }
 
+        try {
+            String uniqueCode = UniqueCodeGenerator.generateUniqueCode(username);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime dateTime = LocalDateTime.parse(birthday, formatter);
+            Person person = new Person(firstName, lastName, dateTime, gender, address, phone, cpn);
+
+            // Save person to the repository
+            person = personRepository.add(person);
+            logger.info("Saved Person ID: " + person.getId());
+
+            // Create subscriber with the person ID
+            Subscriber subscriber = new Subscriber(uniqueCode, person, credentials, LocalDateTime.now());
+            subscriber.setId(person.getId()); // Manually set the ID to ensure it matches the person ID
+            logger.info("Subscriber ID before saving: " + subscriber.getId());
+
+            // Save subscriber to the repository
+            subscriberRepository.add(subscriber);
+            logger.info("Subscriber ID after saving: " + subscriber.getId());
+        } catch (Exception e) {
+            logger.error(e);
+            return;
+        }
+
+        try {
+            notificationService.notifyAdmins(NotificationRest.SUBSCRIBERREGISTERED.name()+":"+username);
+        } catch (Exception e) {
+            logger.error(e);
         }
     }
+
+
     private Map<BookInfo,Integer> countRentalTimes()
     {
         List<BookInfo> bookInfos= (List<BookInfo>) bookInfoRepository.getAll();
@@ -127,7 +188,7 @@ public class ServiceClient implements IServiceClient {
                     }
                     bookInfosInteger.entrySet().stream()
                             .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())) // Sort by value in descending order
-                            .limit(3)
+                            .limit(4)
                             .forEach(entry -> books.get(bookType).add(entry.getKey()));
                 }
             } catch (Exception e) {
@@ -246,27 +307,38 @@ public class ServiceClient implements IServiceClient {
         return (List<BookInfo>) bookInfoRepository.findBookInfoByType(bookType.toString());
     }
 
-    @Override
     public void addBookToBasket(BookInfo book, int nrOfCopies, String username) {
-        Subscriber subscriber= (Subscriber) subscriberRepository.findByUsername(username);
-        BasketItem basketItem=new BasketItem(book,nrOfCopies,subscriber);
+        Subscriber subscriber = subscriberRepository.findByUsername(username);
+        if (subscriber == null) {
+            throw new RuntimeException("Subscriber not found: " + username);
+        }
+
+        // Ensure shopping basket is initialized
+        if (subscriber.getShoppingBasket() == null) {
+            subscriber.setShoppingBasket(new ArrayList<>());
+        }
+
+        BasketItem basketItem = new BasketItem(book, nrOfCopies, subscriber);
         subscriber.getShoppingBasket().add(basketItem);
-        try{
-            basketItemRepository.add(basketItem);
-            subscriberRepository.update(subscriber);
-        }
-        catch (Exception e)
-        {
-            logger.error(e);
-        }
-        //notify
+
         try {
-            notificationService.notifyAdmins("Subscriber:"+username+",book:"+book.getTitle()+",copies:"+nrOfCopies);
-            notificationService.notifyLibrarians("Subscriber:"+username+",book:"+book.getTitle()+",copies:"+nrOfCopies);
+            basketItemRepository.add(basketItem);
+            subscriberRepository.add(subscriber);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("Error saving basket item or subscriber", e);
+            throw e;
+        }
+
+        // Notify
+        try {
+            String notification=MessageFormat.format("Type:{0},Subscriber:{1}",NotificationRest.BASKETUPDATE.toString(), username);
+            notificationService.notifyAdmins(notification);
+            notificationService.notifyLibrarians(notification);
+        } catch (Exception e) {
+            logger.error("Error sending notifications", e);
         }
     }
+
 
     @Override
     public void removeBookFromBasket(BookInfo book, String username) {
@@ -290,8 +362,9 @@ public class ServiceClient implements IServiceClient {
         }
         //notify
         try {
-            notificationService.notifyAdmins("Subscriber:"+username+",book:"+book.getIsbn());
-            notificationService.notifyLibrarians("Subscriber:"+username+",book:"+book.getIsbn());
+            String notification=MessageFormat.format("Type:{0},Subscriber:{1}",NotificationRest.BASKETUPDATE.toString(), username);
+            notificationService.notifyAdmins(notification);
+            notificationService.notifyLibrarians(notification);
         } catch (Exception e) {
             logger.error(e);
         }
@@ -321,8 +394,9 @@ public class ServiceClient implements IServiceClient {
 
         //notify
         try {
-            notificationService.notifyAdmins("Subscriber:"+username+",book:"+book.getIsbn()+",quantity:"+quantity);
-            notificationService.notifyLibrarians("Subscriber:"+username+",book:"+book.getIsbn()+",quantity:"+quantity);
+            String notification=MessageFormat.format("Type:{0},Subscriber:{1}",NotificationRest.BASKETUPDATE.toString(), username);
+            notificationService.notifyAdmins(notification);
+            notificationService.notifyLibrarians(notification);
         } catch (Exception e) {
             logger.error(e);
         }

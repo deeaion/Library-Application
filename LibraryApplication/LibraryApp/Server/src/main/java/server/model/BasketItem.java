@@ -1,11 +1,10 @@
 package server.model;
 
 import jakarta.persistence.*;
-
 import java.util.Objects;
 
 @Entity
-@Table(name="basketitem")
+@Table(name = "basketitem")
 @AttributeOverrides({
         @AttributeOverride(name = "id", column = @Column(name = "basket_id"))
 })
@@ -18,7 +17,7 @@ public class BasketItem extends Identifiable<Long> {
     private int quantity;
 
     @ManyToOne
-    @JoinColumn(name = "subscriber_of_basket_id") // Assuming there's a Subscriber entity
+    @JoinColumn(name = "subscriber_of_basket_id", referencedColumnName = "id")
     private Subscriber subscriberOfBasket;
 
     public BasketItem(BookInfo book, int quantity, Subscriber subscriberOfBasket) {
@@ -27,8 +26,7 @@ public class BasketItem extends Identifiable<Long> {
         this.subscriberOfBasket = subscriberOfBasket;
     }
 
-    public BasketItem() {
-    }
+    public BasketItem() {}
 
     public BookInfo getBook() {
         return book;

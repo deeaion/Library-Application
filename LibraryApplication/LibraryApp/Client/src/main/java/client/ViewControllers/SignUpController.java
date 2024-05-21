@@ -29,19 +29,20 @@ public class SignUpController {
     public void setSignUp(Stage stage, ClientWebSocket clientWebSocket) {
         this.stage = stage;
         this.clientWebSocket = clientWebSocket;
-        sendRegistrationRequest("username", "password", "confPassword", "email", "firstName", "lastName", "cpn", "address", "phone","2024-05-19 00:00:00","gender");
+        int i=16;
+        sendRegistrationRequest("username", "password", "password", "email", "firstName", "lastName", "cpn", "address", "phone","2024-05-19 00:00:00","gender");
     }
 
-    private void initWebSocket() {
-        if (clientWebSocket == null) {
-            try {
-                clientWebSocket = new ClientWebSocket(new URI(URI_WebSocket), this::handleMessage);
-                clientWebSocket.connect();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    private void initWebSocket() {
+//        if (clientWebSocket == null) {
+//            try {
+//                clientWebSocket = new ClientWebSocket(new URI(URI_WebSocket), this::handleMessage);
+//                clientWebSocket.connect();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     @FXML
     private Button btnCancel;

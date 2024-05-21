@@ -1,42 +1,48 @@
 package client.RestCommunication;
 
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.WebSocketClient;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
+import org.springframework.web.socket.sockjs.client.SockJsClient;
+import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
+import java.lang.reflect.Type;
+import java.util.Collections;
 
-import java.net.URI;
-import java.util.function.Consumer;
+public class ClientWebSocket {
 
-public class ClientWebSocket extends WebSocketClient {
+    private StompSession session;
 
-    private Consumer<String> messageHandler;
+    public void connect() {
+        WebSocketClient client = new SockJsClient(Collections.singletonList(new WebSocketTransport(new StandardWebSocketClient())));
+        WebSocketStompClient stompClient = new WebSocketStompClient(client);
 
-    public ClientWebSocket(URI serverUri, Consumer<String> messageHandler) {
-        super(serverUri);
-        this.messageHandler = messageHandler;
+        stompClient.connect("http://localhost:8080/ws", new StompSessionHandlerAdapter() {
+            @Override
+            public void afterConnected(StompSession stompSession, StompHeaders connectedHeaders) {
+                session = stompSession;
+                session.subscribe("/topic/notifications", new StompFrameHandler() {
+                    @Override
+                    public Type getPayloadType(StompHeaders headers) {
+                        return String.class;
+                    }
+
+                    @Override
+                    public void handleFrame(StompHeaders headers, Object payload) {
+                        System.out.println("Received: " + payload);
+                        // Handle the notification
+                        // Update the spinner max value here
+                    }
+                });
+            }
+        });
     }
 
-    @Override
-    public void onOpen(ServerHandshake handshakedata) {
-        System.out.println("Connected to server");
-    }
-
-    @Override
-    public void onMessage(String message) {
-        System.out.println("Received message: " + message);
-        // Pass the message to the handler
-        if (messageHandler != null) {
-            messageHandler.accept(message);
-        }
-    }
-
-    @Override
-    public void onClose(int code, String reason, boolean remote) {
-        System.out.println("Disconnected from server with exit code " + code + " additional info: " + reason);
-    }
-
-    @Override
-    public void onError(Exception ex) {
-        ex.printStackTrace();
+    public StompSession getSession() {
+        return session;
     }
 }

@@ -10,6 +10,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import server.model.Person;
 import server.model.Person;
 import server.persistance.interfaces.IPersonRepository;
@@ -108,7 +109,6 @@ public class PersonRepository implements IPersonRepository {
         logger.traceExit(Persons.get(0));
         return Persons.get(0);
     }
-
     @Override
     public Iterable<Person> findByName(String name) {
         if(name==null)
@@ -118,10 +118,9 @@ public class PersonRepository implements IPersonRepository {
         logger.traceExit(Persons);
         return Persons;
     }
-
     @Override
     public Person add(Person obj) {
-        if(obj==null)
+        if (obj == null)
             return null;
         logger.traceEntry();
         Session session = getSession().openSession();
@@ -129,6 +128,7 @@ public class PersonRepository implements IPersonRepository {
         try {
             tx = session.beginTransaction();
             session.persist(obj);
+            session.flush();
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
@@ -143,7 +143,11 @@ public class PersonRepository implements IPersonRepository {
         logger.traceExit(obj);
         return obj;
     }
-
+    public void flush() {
+        Session session = getSession().openSession();
+        session.flush();
+        session.close();
+    }
     @Override
     public Person remove(Long aLong) {
         if(aLong==null)
@@ -170,7 +174,6 @@ public class PersonRepository implements IPersonRepository {
         logger.traceExit(person);
         return person;
     }
-
     @Override
     public Person update(Person obj) {
         if(obj==null)
@@ -195,7 +198,6 @@ public class PersonRepository implements IPersonRepository {
         logger.traceExit(obj);
         return obj;
     }
-
     @Override
     public Person get(Long aLong) {
         if(aLong==null)
@@ -212,7 +214,6 @@ public class PersonRepository implements IPersonRepository {
         return Persons.get(0);
 
     }
-
     @Override
     public Iterable<Person> getAll() {
         logger.traceEntry();

@@ -25,6 +25,29 @@ public class ClientController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/basket")
+    numberOfItemsInBasket(String username);
+    @GetMapping("/stock/{id}")
+    public ResponseEntity<Integer> getNrOfItemsInStock(@PathVariable Long id) {
+        int nrOfItemsInStock = serviceClient.getNrOfItemsInStock(id);
+        return ResponseEntity.ok(nrOfItemsInStock);
+    }
+
+    @GetMapping("/basket/quantity")
+    public ResponseEntity<Integer> getQuantityOfBookInBasket(
+            @RequestParam Long bookInfoId,
+            @RequestParam String username) {
+        BookInfo bookInfo = new BookInfo(); // You need to fetch BookInfo object by id
+        bookInfo.setId(bookInfoId);
+        int quantity = serviceClient.getQuantityOfBookInBasket(bookInfo, username);
+        return ResponseEntity.ok(quantity);
+    }
+
+    @GetMapping("/basket/{username}")
+    public ResponseEntity<Integer> getBooksInBasket(@PathVariable String username) {
+        int booksInBasket = serviceClient.getBooksInBasket(username);
+        return ResponseEntity.ok(booksInBasket);
+    }
     @GetMapping("/top-books-categories")
     public ResponseEntity<Map<BookType, List<BookInfo>>> getTopBooksCategories() {
         return ResponseEntity.ok(serviceClient.getTopBooksCategories());
