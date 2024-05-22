@@ -15,12 +15,14 @@ public class AdminWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+        System.out.println("WebSocket session established: " + session.getId());
         sessions.add(session);
     }
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         // Handle messages from clients if needed
+        System.out.println("Received message: " + message.getPayload());
     }
 
     @Override

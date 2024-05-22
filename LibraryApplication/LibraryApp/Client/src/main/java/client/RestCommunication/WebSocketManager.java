@@ -1,11 +1,10 @@
 package client.RestCommunication;
 
+import org.springframework.messaging.converter.CompositeMessageConverter;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.simp.stomp.StompCommand;
-import org.springframework.messaging.simp.stomp.StompFrameHandler;
-import org.springframework.messaging.simp.stomp.StompHeaders;
-import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.messaging.converter.StringMessageConverter;
+import org.springframework.messaging.converter.MessageConverter;
+import org.springframework.messaging.simp.stomp.*;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
@@ -13,9 +12,11 @@ import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.concurrent.ExecutionException;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class WebSocketManager {
 
@@ -27,7 +28,7 @@ public class WebSocketManager {
     private WebSocketManager() {
     }
 
-    public static WebSocketManager getInstance() {
+    public static synchronized WebSocketManager getInstance() {
         if (instance == null) {
             instance = new WebSocketManager();
         }
@@ -43,7 +44,10 @@ public class WebSocketManager {
                 Collections.singletonList(new WebSocketTransport(new StandardWebSocketClient()))
         );
         WebSocketStompClient stompClient = new WebSocketStompClient(webSocketClient);
-        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
+
+        // Set up converters
+        List<MessageConverter> messageConverters = Arrays.asList(new StringMessageConverter(), new MappingJackson2MessageConverter());
+        stompClient.setMessageConverter(new CompositeMessageConverter(messageConverters));
 
         try {
             session = stompClient.connectAsync(url, new StompSessionHandlerAdapter() {
@@ -51,26 +55,14 @@ public class WebSocketManager {
                 public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
                     System.out.println("Connected to WebSocket at: " + url);
                     connected = true;
-                    session.subscribe("/topic/clients", new StompFrameHandler() {
-                        @Override
-                        public Type getPayloadType(StompHeaders headers) {
-                            System.out.println("Subscribed to /topic/clients");
-                            return String.class;
-                        }
-
-                        @Override
-                        public void handleFrame(StompHeaders headers, Object payload) {
-                            String message = (String) payload;
-                            System.out.println("Received message: " + message);
-                            notifyListeners(message);
-                        }
-                    });
+                    subscribeToTopic(session, "/topic/clients");
                 }
 
                 @Override
                 public void handleTransportError(StompSession session, Throwable exception) {
                     System.err.println("Transport error: " + exception.getMessage());
                     exception.printStackTrace();
+                    connected = false;
                 }
 
                 @Override
@@ -78,10 +70,33 @@ public class WebSocketManager {
                     System.err.println("Exception: " + exception.getMessage());
                     exception.printStackTrace();
                 }
+
+                @Override
+                public void handleFrame(StompHeaders headers, Object payload) {
+                    // This method can be used to handle control frames if needed
+                }
             }).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    private void subscribeToTopic(StompSession session, String topic) {
+        session.subscribe(topic, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                System.out.println("Subscribed to " + topic);
+                return String.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                String message = (String) payload;
+                System.out.println("Received message: " + message);
+                notifyListeners(message);
+            }
+        });
+        System.out.println("Subscription request to " + topic + " sent.");
     }
 
     public void addListener(WebSocketMessageListener listener) {

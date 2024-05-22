@@ -22,6 +22,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -369,6 +370,25 @@ public class SubscriberMainController implements WebSocketMessageListener {
                     }
                 }
         });
+
+    }
+    @FXML
+    private AnchorPane cartBtn;
+    @FXML
+    void handleShowCart(MouseEvent event) {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/views/subscriber/subscriberCart-view.fxml"));
+        Parent root= null;
+        try {
+            root = fxmlLoader.load();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        SubscriberCartController controller = fxmlLoader.<SubscriberCartController>getController();
+        controller.setSubscriber(stage, credentials,clientService);
+        stage.setTitle("Cart");
+        stage.setScene(new Scene(root ));
+        stage.show();
 
     }
 }

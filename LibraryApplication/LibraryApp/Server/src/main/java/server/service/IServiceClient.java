@@ -24,4 +24,6 @@ public interface IServiceClient {
     void addBookToBasket(BookInfo book,int nrOfCopies,String username);
     void removeBookFromBasket(BookInfo book,String username);
     void updateBookQuantity(BookInfo book,int quantity,String username);
+
+    void finishOrder(String username);
 }
