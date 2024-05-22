@@ -19,13 +19,19 @@ public class ClientController {
     @Autowired
     private IServiceClient serviceClient;
 
+
+    @PostMapping("/finish-order")
+    public ResponseEntity<Void> finishOrder(@RequestParam String username) {
+        serviceClient.finishOrder(username);
+        return ResponseEntity.ok().build();
+    }
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody RegistrationData data) {
         serviceClient.register(data.username, data.password, data.conf_password, data.email, data.firstName, data.lastName, data.cpn, data.address, data.phone, data.birthday, data.gender);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/basketSize")
+    @GetMapping("/basketSize/{username}")
     public int numberOfItemsInBasket(@PathVariable String username)
     {
         int nrOfItems = serviceClient.numberOfItemsInBasket(username);
@@ -48,8 +54,8 @@ public class ClientController {
     }
 
     @GetMapping("/basket/{username}")
-    public ResponseEntity<Integer> getBooksInBasket(@PathVariable String username) {
-        int booksInBasket = serviceClient.getBooksInBasket(username);
+    public ResponseEntity<List<BasketItem>> getBooksInBasket(@PathVariable String username) {
+        List<BasketItem> booksInBasket = serviceClient.getBasketItems(username);
         return ResponseEntity.ok(booksInBasket);
     }
     @GetMapping("/top-books-categories")
