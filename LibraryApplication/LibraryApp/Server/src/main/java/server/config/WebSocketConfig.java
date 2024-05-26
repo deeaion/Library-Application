@@ -16,11 +16,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         String endpoint = "/client-websocket";
-        registry.addEndpoint(endpoint).addInterceptors(new CustomHandshakeInterceptor()).setAllowedOriginPatterns("*","ws://localhost:55555").withSockJS();
+        registry.addEndpoint(endpoint).addInterceptors(new CustomHandshakeInterceptor()).setAllowedOriginPatterns("*").withSockJS();
         endpoint = "/librarian-websocket";
-        registry.addEndpoint(endpoint).setAllowedOriginPatterns("*","ws://localhost:55555").withSockJS();
+        registry.addEndpoint(endpoint).setAllowedOriginPatterns("*").withSockJS();
         endpoint = "/admin-websocket";
-        registry.addEndpoint(endpoint).setAllowedOriginPatterns("*","ws://localhost:55555").withSockJS();
+        registry.addEndpoint(endpoint).setAllowedOriginPatterns("*").withSockJS();
     }
 
 
