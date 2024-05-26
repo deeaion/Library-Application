@@ -2,9 +2,12 @@ package client.RestCommunication.services;
 
 import client.ViewControllers.librarian.LibrarianMainController;
 import client.ViewControllers.subscriber.SubscriberViewBookController;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import common.model.BasketItem;
 import common.model.BookInfo;
+import common.model.CredentialsDTO;
 import common.model.Enums.BookType;
 import common.model.Enums.Genre;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +24,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -86,7 +90,18 @@ public class ClientService {
     }
 
 
+    public void finishOrder(String username) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(BASE_URL + "/finish-order?username=" + username))
+                .GET()
+                .build();
 
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Failed to finish order: " + response.body());
+        }
+    }
     public int getNrOfItemsInStock(Long id) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(BASE_URL + "/stock/" + id))
@@ -116,7 +131,21 @@ public class ClientService {
             throw new RuntimeException("Failed to fetch quantity of book in basket: " + response.body());
         }
     }
+    public int updateBasketItemQuantity(BookInfo bookInfo,int quantity, String username) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(BASE_URL + "/update-basket-item-quantity?quantity=" + quantity + "&username=" + username))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(bookInfo)))
+                .build();
 
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            return objectMapper.readValue(response.body(), Integer.class);
+        } else {
+            throw new RuntimeException("Failed to update basket item quantity: " + response.body());
+        }
+    }
     public int getBooksInBasket(String username) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(BASE_URL + "/basket/" + username))
@@ -157,7 +186,7 @@ public class ClientService {
 
     public int getNrOfItemsInBasket(String username) {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/basket/" + username))
+                .uri(URI.create(BASE_URL + "/basketSize/" + username))
                 .GET()
                 .build();
         HttpResponse<String> response= null;
@@ -171,6 +200,48 @@ public class ClientService {
         }
         return response.statusCode();
     }
-}
+
+    public List<BasketItem> getBasketItems(CredentialsDTO credentials) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/basket/" + credentials.getUsername()))
+                .GET()
+                .build();
+        HttpResponse<String> response = null;
+        try {
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            return objectMapper.readValue(response.body(), new TypeReference<List<BasketItem>>() {});
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+
+    public void removeBookFromBasket(BookInfo book, String username) throws JsonProcessingException {
+        /*
+            @PostMapping("/remove-book-from-basket")
+    public ResponseEntity<Void> removeBookFromBasket(@RequestBody BookInfo book, @RequestParam String username) {
+        serviceClient.removeBookFromBasket(book, username);
+        return ResponseEntity.ok().build();
+    }
+         */
+
+       HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/remove-book-from-basket?username=" + username))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(book)))
+                .build();
+        HttpResponse<String> response= null;
+        try {
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                throw new RuntimeException("Failed to remove book from basket: " + response.body());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }}
 
 

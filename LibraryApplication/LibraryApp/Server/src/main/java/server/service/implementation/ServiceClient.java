@@ -13,6 +13,7 @@ import server.model.Enums.StateOfRental;
 import server.persistance.implementations.*;
 import server.restCommon.NotificationRest;
 import server.service.IServiceClient;
+import server.service.restHelping.BasketItemDTO;
 import server.service.util.PasswordEncryption;
 import server.service.util.UniqueCodeGenerator;
 
@@ -41,6 +42,8 @@ public class ServiceClient implements IServiceClient {
     @Autowired
     private RentalRepository rentalRepository;
     private final Logger logger = LogManager.getLogger(ServiceClient.class);
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     @Override
     public int getNrOfItemsInStock(Long id)
     {
@@ -274,7 +277,7 @@ public class ServiceClient implements IServiceClient {
     }
 
     @Override
-    public List<BasketItem> getBasketItems(String username) {
+    public List<BasketItemDTO> getBasketItems(String username) {
         Subscriber subscriber= (Subscriber) subscriberRepository.findByUsername(username);
         return subscriber.getShoppingBasket();
     }
@@ -306,6 +309,7 @@ public class ServiceClient implements IServiceClient {
     public List<BookInfo> getBooksForType(BookType bookType) {
         return (List<BookInfo>) bookInfoRepository.findBookInfoByType(bookType.toString());
     }
+
 
     public void addBookToBasket(BookInfo book, int nrOfCopies, String username) {
         Subscriber subscriber = subscriberRepository.findByUsername(username);
@@ -395,6 +399,54 @@ public class ServiceClient implements IServiceClient {
             }
         }
 
+        //notify
+        try {
+            String notification=MessageFormat.format("Type:{0},Subscriber:{1}",NotificationRest.BASKETUPDATE.toString(), username);
+            notificationService.notifyAdmins(notification);
+            notificationService.notifyLibrarians(notification);
+        } catch (Exception e) {
+            logger.error(e);
+        }
+    }
+
+    @Override
+    public void finishOrder(String username) {
+        Subscriber subscriber= (Subscriber) subscriberRepository.findByUsername(username);
+        List<BasketItem> basketItems=subscriber.getShoppingBasket();
+        for(BasketItem basketItem:basketItems)
+        {
+            BookInfo bookInfo=basketItem.getBook();
+            int quantity=basketItem.getQuantity();
+            List<Book> booksOfInfo= (List<Book>) bookRepository.findByBookandState(bookInfo.getId(),StateOfRental.NOT_RENTED);
+            if(booksOfInfo.size()<quantity)
+            {
+               throw new RuntimeException("Not enough books in stock");
+            }
+            for(int i=0;i<quantity;i++)
+            {
+                List<Integer> indexes=new ArrayList<>();
+                //randomly select the books
+                //with random
+                Random random=new Random();
+                int index=random.nextInt(booksOfInfo.size());
+                while(indexes.contains(index))
+                {
+                    index=random.nextInt(booksOfInfo.size());
+                }
+                indexes.add(index);
+                Book book=booksOfInfo.get(index);
+                book.setState(StateOfRental.RENTED);
+
+            }
+        }
+        subscriber.getShoppingBasket().clear();
+        try{
+            subscriberRepository.update(subscriber);
+        }
+        catch (Exception e)
+        {
+            logger.error(e);
+        }
         //notify
         try {
             String notification=MessageFormat.format("Type:{0},Subscriber:{1}",NotificationRest.BASKETUPDATE.toString(), username);
