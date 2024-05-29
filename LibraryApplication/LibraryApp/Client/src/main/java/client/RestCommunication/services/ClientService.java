@@ -10,6 +10,7 @@ import common.model.BookInfo;
 import common.model.CredentialsDTO;
 import common.model.Enums.BookType;
 import common.model.Enums.Genre;
+import common.restCommon.BasketItemDTO;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -86,6 +87,14 @@ public class ClientService {
                 .uri(URI.create(BASE_URL + "/logout"))
                 .GET()
                 .build();
+        int responseCode = 0;
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            responseCode = response.statusCode();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -131,11 +140,11 @@ public class ClientService {
             throw new RuntimeException("Failed to fetch quantity of book in basket: " + response.body());
         }
     }
-    public int updateBasketItemQuantity(BookInfo bookInfo,int quantity, String username) throws Exception {
+    public int updateBasketItemQuantity(BasketItemDTO basketItemDTO,int quantity, String username) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(BASE_URL + "/update-basket-item-quantity?quantity=" + quantity + "&username=" + username))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(bookInfo)))
+                .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(basketItemDTO)))
                 .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -194,14 +203,14 @@ public class ClientService {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             return Integer.parseInt(response.body());
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         } catch (InterruptedException e) {
-           e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return response.statusCode();
+
     }
 
-    public List<BasketItem> getBasketItems(CredentialsDTO credentials) {
+    public List<BasketItemDTO> getBasketItems(CredentialsDTO credentials) {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL + "/basket/" + credentials.getUsername()))
                 .GET()
@@ -209,16 +218,21 @@ public class ClientService {
         HttpResponse<String> response = null;
         try {
             response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            return objectMapper.readValue(response.body(), new TypeReference<List<BasketItem>>() {});
+            if (response.statusCode() == 200) {
+                return objectMapper.readValue(response.body(), new TypeReference<List<BasketItemDTO>>() {});
+            } else {
+                // Handle non-200 response codes
+                throw new RuntimeException("Failed to fetch basket items: " + response.body());
+            }
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return new ArrayList<>();
     }
 
 
-    public void removeBookFromBasket(BookInfo book, String username) throws JsonProcessingException {
-        /*
+
+    public void removeBookFromBasket(BasketItemDTO book, String username) throws JsonProcessingException {
+        /*a
             @PostMapping("/remove-book-from-basket")
     public ResponseEntity<Void> removeBookFromBasket(@RequestBody BookInfo book, @RequestParam String username) {
         serviceClient.removeBookFromBasket(book, username);
@@ -237,11 +251,58 @@ public class ClientService {
             if (response.statusCode() != 200) {
                 throw new RuntimeException("Failed to remove book from basket: " + response.body());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
+           throw new RuntimeException(e);
+        }
+    }
+
+    public void modifyBasketItem(BasketItemDTO selectedItem, String username) {
+        /*
+        @PostMapping("/update-book-quantity")
+    public ResponseEntity<Void> updateBookQuantity(@RequestBody BasketItemDTO book, @RequestParam int quantity, @RequestParam String username) {
+        serviceClient.updateBookQuantity(book, quantity, username);
+        return ResponseEntity.ok().build();
+    }
+         */
+
+        HttpRequest request = null;
+        try {
+            request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/update-book-quantity?quantity=" + selectedItem.getQuantity() + "&username=" + username))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(selectedItem)))
+                    .build();
+        } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-    }}
+        HttpResponse<String> response= null;
+        try {
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                throw new RuntimeException("Failed to modify basket item: " + response.body());
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void finishRent(CredentialsDTO credentials) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/finish-order?username=" + credentials.getUsername()))
+                .POST(HttpRequest.BodyPublishers.noBody()) // Change to POST method
+                .build();
+
+        HttpResponse<String> response;
+        try {
+            response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                throw new RuntimeException("Failed to finish rent: " + response.body());
+            }
+        } catch (IOException | InterruptedException e) {
+//            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+}
 
 

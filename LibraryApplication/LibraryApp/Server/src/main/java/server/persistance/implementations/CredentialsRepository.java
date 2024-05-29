@@ -9,9 +9,11 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import server.model.Credentials;
 import server.model.Credentials;
+import server.model.Validators.CredentialsValidator;
 import server.persistance.interfaces.ICredentialsRepository;
 import server.persistance.utils.DBUtils;
 
@@ -23,6 +25,8 @@ public class CredentialsRepository implements ICredentialsRepository {
     private DBUtils dbUtils;
     private static final Logger logger= LogManager.getLogger();
     private static SessionFactory sessionFactory;
+    @Autowired
+    private CredentialsValidator credentialsValidator;
 
     public static SessionFactory getSession() {
         logger.traceEntry();

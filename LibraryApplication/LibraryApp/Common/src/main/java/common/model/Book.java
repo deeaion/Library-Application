@@ -6,7 +6,7 @@ import common.model.Enums.StateOfRental;
 @Entity
 @Table(name = "book")
 public class Book extends Identifiable<Long> {
-    @ManyToOne(cascade = CascadeType.ALL) // Assuming BookInfo is also a JPA entity
+    @ManyToOne() // Assuming BookInfo is also a JPA entity
     @JoinColumn(name = "information_id", referencedColumnName = "id", nullable = true)
     private BookInfo bookInfo;
 

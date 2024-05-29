@@ -106,6 +106,28 @@ public class RentalRepository implements IRentalRepository {
     }
 
     @Override
+    public void flush() {
+        logger.traceEntry();
+        Session session = getSession().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.flush();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            logger.error("Error flushing", e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        logger.traceExit();
+    }
+
+    @Override
     public Rental add(Rental obj) {
         if(obj==null)
             throw new IllegalArgumentException("Entity doesn t exist");
@@ -114,18 +136,26 @@ public class RentalRepository implements IRentalRepository {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.save(obj);
-            tx.commit();
+
+            if (obj.getId() != null) {
+                session.merge(obj);
+            } else {
+                session.save(obj);
+            }
+
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
             }
             logger.error("Error saving rental", e);
         } finally {
+            session.flush();
+
             if (session != null) {
                 session.close();
             }
         }
+
         logger.traceExit(obj);
         return obj;
     }

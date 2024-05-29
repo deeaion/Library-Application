@@ -9,10 +9,13 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import server.model.Credentials;
 import server.model.Person;
+import server.model.Rental;
 import server.model.Subscriber;
+import server.model.Validators.SubscriberValidator;
 import server.persistance.interfaces.ISubscriberRepository;
 import server.persistance.utils.DBUtils;
 
@@ -24,6 +27,8 @@ public class SubscriberRepository implements ISubscriberRepository {
     private DBUtils dbUtils;
     private static final Logger logger= LogManager.getLogger();
     private static SessionFactory sessionFactory;
+    @Autowired
+    private SubscriberValidator subscriberValidator ;
 
     public static SessionFactory getSession() {
         logger.traceEntry();
@@ -64,6 +69,7 @@ public class SubscriberRepository implements ISubscriberRepository {
             if (attributes.size() > 0) {
                 StringBuilder sql = new StringBuilder("from Subscriber s ");
                 sql.append("left join fetch s.shoppingBasket ");
+//                sql.append("left join fetch s.currentRentals ");
                 sql.append("where ");
                 for (int i = 0; i < attributes.size(); i++) {
                     sql.append("s.").append(attributes.get(i)).append(" = :value").append(i);
@@ -149,6 +155,56 @@ public class SubscriberRepository implements ISubscriberRepository {
         logger.traceExit(Subscribers.get(0));
         return Subscribers.get(0);
     }
+
+    @Override
+    public List<Rental> getCurrentRentalsForUser(String username) {
+        logger.traceEntry();
+        Session session = getSession().openSession();
+        Transaction tx = null;
+        List<Rental> rentals = new ArrayList<>();
+        try {
+            tx = session.beginTransaction();
+
+            Query<Rental> query = session.createQuery("from Subscriber as s left join s.currentRentals where s.credentials.username=:username", Rental.class);
+            query.setParameter("username", username);
+            rentals = query.list();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            logger.error("Error getting current rentals", e);
+        } finally {
+            session.close();
+        }
+        logger.traceExit(rentals);
+        return rentals;
+    }
+
+    @Override
+    public List<Rental> getPreviousRentalsForUser(String username) {
+        logger.traceEntry();
+        Session session = getSession().openSession();
+        Transaction tx = null;
+        List<Rental> rentals = new ArrayList<>();
+        try {
+            tx = session.beginTransaction();
+            Query<Rental> query = session.createQuery("from Subscriber as s left join s.previousRentals where s.credentials.username=:username", Rental.class);
+            query.setParameter("username", username);
+            rentals = query.list();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            logger.error("Error getting previous rentals", e);
+        } finally {
+            session.close();
+        }
+        logger.traceExit(rentals);
+        return rentals;
+    }
+
     @Override
     public Subscriber add(Subscriber obj) {
         if (obj == null) return null;
@@ -160,9 +216,8 @@ public class SubscriberRepository implements ISubscriberRepository {
             if (obj.getId() != null) {
                session.merge(obj);
             } else {
-                session.persist(obj);
+                session.merge(obj);
             }
-            session.flush();
 
             tx.commit();
         } catch (Exception e) {
@@ -171,8 +226,11 @@ public class SubscriberRepository implements ISubscriberRepository {
             }
             logger.error("Error adding element in DB", e);
         } finally {
+            session.flush();
+
             session.close();
         }
+
         logger.traceExit(obj);
         return obj;
     }
@@ -194,6 +252,8 @@ public class SubscriberRepository implements ISubscriberRepository {
                 tx.rollback();
             }
             logger.error("Error removing subscriber", e);
+            session.flush();
+
         } finally {
             if (session != null) {
                 session.close();
@@ -213,6 +273,8 @@ public class SubscriberRepository implements ISubscriberRepository {
             tx = session.beginTransaction();
             session.update(obj);
             tx.commit();
+//            session.flush();
+
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();

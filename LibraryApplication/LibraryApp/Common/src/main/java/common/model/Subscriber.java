@@ -3,12 +3,13 @@ package common.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "subscriber")
 public class Subscriber extends Person {
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade=CascadeType.MERGE)
     @JoinColumn(name = "credentials_id", referencedColumnName = "id")
     private Credentials credentials;
 
@@ -18,17 +19,24 @@ public class Subscriber extends Person {
     @Column(name = "unique_code")
     private String uniqueCode;
 
-    @OneToMany(mappedBy = "subscriberOfBasket")
+
+
+
+
+
+    @OneToMany(mappedBy = "subscriberOfBasket", fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
+
 
     private List<BasketItem> shoppingBasket;
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade=CascadeType.MERGE)
     @JoinTable(
             name = "CurrentRentals",
             joinColumns = @JoinColumn(name = "subscriber_id"),
             inverseJoinColumns = @JoinColumn(name = "rental_id")
     )
+
     private List<Rental> currentRentals;
 
     public void setUniqueCode(String uniqueCode) {
@@ -47,7 +55,31 @@ public class Subscriber extends Person {
         this.previousRentals = previousRentals;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    public Credentials getCredentials() {
+        return credentials;
+    }
+
+    public LocalDateTime getDateOfSubscription() {
+        return dateOfSubscription;
+    }
+
+    public String getUniqueCode() {
+        return uniqueCode;
+    }
+
+    public List<BasketItem> getShoppingBasket() {
+        return shoppingBasket;
+    }
+
+    public List<Rental> getCurrentRentals() {
+        return currentRentals;
+    }
+
+    public List<Rental> getPreviousRentals() {
+        return previousRentals;
+    }
+
+    @ManyToMany(cascade=CascadeType.MERGE)
     @JoinTable(
             name = "PreviousRentals",
             joinColumns = @JoinColumn(name = "subscriber_id"),
@@ -60,10 +92,20 @@ public class Subscriber extends Person {
         this.credentials = credentials;
         this.dateOfSubscription = dateOfSubscription;
         this.uniqueCode=uniqueCode;
+        this.currentRentals = new ArrayList<>();
+        this.previousRentals = new ArrayList<>();
     }
 
     public Subscriber() {
     }
+    public void addCurrentRental(Rental rental) {
+        if (currentRentals == null) {
+            currentRentals = new ArrayList<>();
+        }
+        currentRentals.add(rental);
+        rental.setRented_by(this.credentials);
+    }
+
 
     public void setCredentials(Credentials credentials) {
         this.credentials = credentials;

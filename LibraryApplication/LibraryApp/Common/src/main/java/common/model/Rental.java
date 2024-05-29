@@ -21,7 +21,7 @@ public class Rental extends Identifiable<Long>  {
     @ManyToOne
     @JoinColumn(name="retrieved_by", referencedColumnName = "id")
     private Credentials retrieved_by;
-    @ManyToMany
+    @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(
             name = "bookrented",
             joinColumns = @JoinColumn(name = "rental_id"),
@@ -30,6 +30,13 @@ public class Rental extends Identifiable<Long>  {
 
     public List<Book> getBooks() {
         return books;
+    }
+    public void addSubscriber(Subscriber subscriber) {
+        if (rented_by == null) {
+           rented_by = subscriber.getCredentials();
+        }
+        rented_by= subscriber.getCredentials();
+        subscriber.getCurrentRentals().add(this);
     }
 
     public void setBooks(List<Book> books) {

@@ -10,7 +10,7 @@ import server.persistance.implementations.LibrarianRepository;
 import server.service.util.PasswordEncryption;
 
 @SpringBootApplication
-@EnableTransactionManagement
+//@EnableTransactionManagement
 public class ServerApplication {
 
     public static void main(String[] args) {

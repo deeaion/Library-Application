@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import server.config.NotificationService;
 import server.model.*;
 
@@ -14,6 +16,7 @@ import server.persistance.implementations.*;
 import server.restCommon.NotificationRest;
 import server.service.IServiceClient;
 import server.service.restHelping.BasketItemDTO;
+import server.service.restHelping.TransformDTO;
 import server.service.util.PasswordEncryption;
 import server.service.util.UniqueCodeGenerator;
 
@@ -43,7 +46,6 @@ public class ServiceClient implements IServiceClient {
     private RentalRepository rentalRepository;
     private final Logger logger = LogManager.getLogger(ServiceClient.class);
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     @Override
     public int getNrOfItemsInStock(Long id)
     {
@@ -59,12 +61,14 @@ public class ServiceClient implements IServiceClient {
         }
         return count;
     }
+
     @Override
     public int getBooksInBasket(String username)
     {
         Subscriber subscriber= (Subscriber) subscriberRepository.findByUsername(username);
         return subscriber.getShoppingBasket().size();
     }
+
     @Override
     public int getQuantityOfBookInBasket(BookInfo bookInfo,String username)
     {
@@ -79,6 +83,7 @@ public class ServiceClient implements IServiceClient {
         }
         return 0;
     }
+
     @Override
     public int numberOfItemsInBasket(String username)
     {
@@ -279,7 +284,7 @@ public class ServiceClient implements IServiceClient {
     @Override
     public List<BasketItemDTO> getBasketItems(String username) {
         Subscriber subscriber= (Subscriber) subscriberRepository.findByUsername(username);
-        return subscriber.getShoppingBasket();
+        return TransformDTO.transformBasketList(subscriber.getShoppingBasket());
     }
 
     @Override
@@ -327,7 +332,7 @@ public class ServiceClient implements IServiceClient {
 
         try {
             basketItemRepository.add(basketItem);
-            subscriberRepository.add(subscriber);
+            subscriberRepository.update(subscriber);
         } catch (Exception e) {
             logger.error("Error saving basket item or subscriber", e);
             throw e;
@@ -336,7 +341,7 @@ public class ServiceClient implements IServiceClient {
         // Notify
         try {
             System.out.println("Sending notification");
-            String notification=MessageFormat.format("Type:{0},Subscriber:{1}\r\n",NotificationRest.BASKETUPDATE.toString(), username);
+            String notification=MessageFormat.format("Type:{0},Subscriber:{1}\r\n",NotificationRest.BASKETUPDATED.toString(), username);
             System.out.println("Notification: " + notification);
             notificationService.notifySubscribers(notification);
             notificationService.notifyAdmins(notification);
@@ -348,17 +353,18 @@ public class ServiceClient implements IServiceClient {
 
 
     @Override
-    public void removeBookFromBasket(BookInfo book, String username) {
+    public void removeBookFromBasket(BasketItemDTO book, String username) {
         Subscriber subscriber= (Subscriber) subscriberRepository.findByUsername(username);
         List<BasketItem> basketItems=subscriber.getShoppingBasket();
         for(BasketItem basketItem:basketItems)
         {
-            if(basketItem.getBook().equals(book))
+            if(basketItem.getId()==book.getId())
             {
                 basketItems.remove(basketItem);
                 try{
-                    basketItemRepository.remove(basketItem.getId());
                     subscriberRepository.update(subscriber);
+
+//                    basketItemRepository.remove(basketItem.getId());
                 }
                 catch (Exception e)
                 {
@@ -369,7 +375,7 @@ public class ServiceClient implements IServiceClient {
         }
         //notify
         try {
-            String notification=MessageFormat.format("Type:{0},Subscriber:{1}",NotificationRest.BASKETUPDATE.toString(), username);
+            String notification=MessageFormat.format("Type:{0},Subscriber:{1}",NotificationRest.BASKETUPDATED.toString(), username);
             notificationService.notifyAdmins(notification);
             notificationService.notifyLibrarians(notification);
         } catch (Exception e) {
@@ -379,12 +385,12 @@ public class ServiceClient implements IServiceClient {
     }
 
     @Override
-    public void updateBookQuantity(BookInfo book, int quantity, String username) {
+    public void updateBookQuantity(BasketItemDTO book, int quantity, String username) {
         Subscriber subscriber= (Subscriber) subscriberRepository.findByUsername(username);
         List<BasketItem> basketItems=subscriber.getShoppingBasket();
         for(BasketItem basketItem:basketItems)
         {
-            if(basketItem.getBook().equals(book))
+            if(basketItem.getId()==book.getId())
             {
                 basketItem.setQuantity(quantity);
                 try{
@@ -399,9 +405,10 @@ public class ServiceClient implements IServiceClient {
             }
         }
 
+
         //notify
         try {
-            String notification=MessageFormat.format("Type:{0},Subscriber:{1}",NotificationRest.BASKETUPDATE.toString(), username);
+            String notification=MessageFormat.format("Type:{0},Subscriber:{1}",NotificationRest.BASKETUPDATED.toString(), username);
             notificationService.notifyAdmins(notification);
             notificationService.notifyLibrarians(notification);
         } catch (Exception e) {
@@ -409,52 +416,62 @@ public class ServiceClient implements IServiceClient {
         }
     }
 
-    @Override
+
     public void finishOrder(String username) {
-        Subscriber subscriber= (Subscriber) subscriberRepository.findByUsername(username);
-        List<BasketItem> basketItems=subscriber.getShoppingBasket();
-        for(BasketItem basketItem:basketItems)
-        {
-            BookInfo bookInfo=basketItem.getBook();
-            int quantity=basketItem.getQuantity();
-            List<Book> booksOfInfo= (List<Book>) bookRepository.findByBookandState(bookInfo.getId(),StateOfRental.NOT_RENTED);
-            if(booksOfInfo.size()<quantity)
-            {
-               throw new RuntimeException("Not enough books in stock");
-            }
-            for(int i=0;i<quantity;i++)
-            {
-                List<Integer> indexes=new ArrayList<>();
-                //randomly select the books
-                //with random
-                Random random=new Random();
-                int index=random.nextInt(booksOfInfo.size());
-                while(indexes.contains(index))
-                {
-                    index=random.nextInt(booksOfInfo.size());
-                }
-                indexes.add(index);
-                Book book=booksOfInfo.get(index);
-                book.setState(StateOfRental.RENTED);
+        Subscriber subscriber = subscriberRepository.findByUsername(username);
+        List<BasketItem> basketItems = subscriber.getShoppingBasket();
+        List<Book> booksToRent = new ArrayList<>();
 
+        for (BasketItem basketItem : basketItems) {
+            BookInfo bookInfo = basketItem.getBook();
+            int quantity = basketItem.getQuantity();
+
+            List<Book> booksOfInfo = (List<Book>) bookRepository.findByBookandState(bookInfo.getId(), StateOfRental.NOT_RENTED);
+            if (booksOfInfo.size() < quantity) {
+                throw new RuntimeException("Not enough books in stock");
+            }
+
+            Random random = new Random();
+            for (int i = 0; i < quantity; i++) {
+                int index = random.nextInt(booksOfInfo.size());
+                booksToRent.add(booksOfInfo.get(index));
+                booksOfInfo.remove(index);
             }
         }
+
+        // Clear the shopping basket
         subscriber.getShoppingBasket().clear();
-        try{
-            subscriberRepository.update(subscriber);
+
+        Rental rental = new Rental(LocalDateTime.now(), null, subscriber.getCredentials(), null);
+        rental.setBooks(booksToRent);
+
+        rentalRepository.add(rental); // Persist the rental
+
+        subscriber.addCurrentRental(rental); // Manage bidirectional relationship
+
+        subscriberRepository.update(subscriber); // Update the subscriber
+
+        for (Book book : booksToRent) {
+            book.setState(StateOfRental.RENTED);
+            bookRepository.update(book); // Update the books
         }
-        catch (Exception e)
-        {
-            logger.error(e);
-        }
-        //notify
+
+        // Notify admins and librarians
+        String notification = MessageFormat.format("Type:{0},Subscriber:{1}", NotificationRest.RENTMADE.toString(), username);
+        notificationService.notifyAdmins(notification);
+        notificationService.notifyLibrarians(notification);
+        notificationService.notifySubscribers(notification);
+    }
+
+    private void notifyAdminsAndLibrarians(String username, NotificationRest notificationType) {
         try {
-            String notification=MessageFormat.format("Type:{0},Subscriber:{1}",NotificationRest.BASKETUPDATE.toString(), username);
+            String notification = MessageFormat.format("Type:{0},Subscriber:{1}", notificationType, username);
             notificationService.notifyAdmins(notification);
             notificationService.notifyLibrarians(notification);
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("Error sending notifications", e);
         }
     }
+
 
 }

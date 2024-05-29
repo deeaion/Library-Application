@@ -4,14 +4,13 @@ import client.RestCommunication.ClientWebSocket;
 import client.RestCommunication.WebSocketManager;
 import client.RestCommunication.WebSocketMessageListener;
 import client.RestCommunication.services.ClientService;
+import client.ViewControllers.MessageAlert;
 import common.model.BookInfo;
 import common.model.CredentialsDTO;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
@@ -51,7 +50,7 @@ public class SubscriberViewBookController implements WebSocketMessageListener {
             int max = countInStock - countInCart;
             nrOfUnitsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, max, 0));
         } catch (Exception e) {
-            e.printStackTrace();
+            MessageAlert.showMessage(null, Alert.AlertType.ERROR, "Error", e.getMessage());
         }
     }
     private void setBookInfo() {
@@ -74,13 +73,13 @@ public class SubscriberViewBookController implements WebSocketMessageListener {
         try {
             countInStock = clientService.getNrOfItemsInStock(bookInfo.getId());
         } catch (Exception e) {
-            e.printStackTrace();
+            MessageAlert.showMessage(null, Alert.AlertType.ERROR, "Error", e.getMessage());
         }
         int countInCart = 0;
         try {
             countInCart = clientService.getQuantityOfBookInBasket(bookInfo.getId(), credentials.getUsername());
         } catch (Exception e) {
-            e.printStackTrace();
+            MessageAlert.showMessage(null, Alert.AlertType.ERROR, "Error", e.getMessage());
         }
         int max = countInStock - countInCart;
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, max, 0);
@@ -128,18 +127,24 @@ public class SubscriberViewBookController implements WebSocketMessageListener {
     @FXML
     void handleAddToCart(ActionEvent event) {
         int nrOfUnits = nrOfUnitsSpinner.getValue();
-        try {
-            clientService.addBookToBasket(bookInfo, nrOfUnits, credentials.getUsername());
-        } catch (Exception e) {
-            e.printStackTrace();
+        Platform.runLater(()->
+        {
+            try {
+                clientService.addBookToBasket(bookInfo, nrOfUnits, credentials.getUsername());
+            } catch (Exception e) {
+                MessageAlert.showMessage(null, Alert.AlertType.ERROR, "Error", e.getMessage());
 
 
-    }
+            }
+        });
+
 
 }
 
     @Override
     public void onMessageReceived(String message) {
-        System.out.println(message);
+
+        Platform.runLater(this::updateSpinnerMax);
+
     }
 }

@@ -3,7 +3,7 @@ package common.model;
 import java.util.Objects;
 
 public class CredentialsDTO extends Credentials {
-    private String type;
+    private String type="";
     public CredentialsDTO(Credentials credentials, String type) {
         super(credentials.getUsername(), credentials.getPassword(), credentials.getEmail(), credentials.getSeed());
         this.type = type;
@@ -12,6 +12,11 @@ public class CredentialsDTO extends Credentials {
     public CredentialsDTO(String username, String password, String email, String seed, String type) {
         super(username, password, email, seed);
         this.type = type;
+    }
+
+    public CredentialsDTO(Credentials credentials) {
+        super(credentials.getUsername(), credentials.getPassword(), credentials.getEmail(), credentials.getSeed());
+
     }
 
     public String getType() {

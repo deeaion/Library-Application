@@ -1,6 +1,7 @@
 package client.ViewControllers;
 
 import client.RestCommunication.ClientWebSocket;
+import client.ViewControllers.admin.AdminMainController;
 import client.ViewControllers.librarian.LibrarianMainController;
 import client.ViewControllers.subscriber.SubscriberMainController;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -117,6 +118,21 @@ public class LogInController {
     }
 
     private void openAdminView() {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/views/admin/adminMain-view.fxml"));
+        Parent root= null;
+        try {
+            root = fxmlLoader.load();
+        } catch (Exception e) {
+           MessageAlert.showMessage(null, Alert.AlertType.ERROR, "Error", e.getMessage());
+            return;
+
+        }
+        AdminMainController controller = fxmlLoader.<AdminMainController>getController();
+        //controller.setAdmin(stage, credentials);
+        stage.setTitle("Admin");
+        stage.setScene(new Scene(root ));
+        stage.show();
 
     }
 

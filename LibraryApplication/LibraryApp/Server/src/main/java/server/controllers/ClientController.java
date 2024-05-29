@@ -8,6 +8,7 @@ import server.model.BasketItem;
 import server.model.Enums.BookType;
 import server.model.Enums.Genre;
 import server.service.IServiceClient;
+import server.service.restHelping.BasketItemDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -54,8 +55,8 @@ public class ClientController {
     }
 
     @GetMapping("/basket/{username}")
-    public ResponseEntity<List<BasketItem>> getBooksInBasket(@PathVariable String username) {
-        List<BasketItem> booksInBasket = serviceClient.getBasketItems(username);
+    public ResponseEntity<List<BasketItemDTO>> getBooksInBasket(@PathVariable String username) {
+        List<BasketItemDTO> booksInBasket = serviceClient.getBasketItems(username);
         return ResponseEntity.ok(booksInBasket);
     }
     @GetMapping("/top-books-categories")
@@ -75,7 +76,7 @@ public class ClientController {
     }
 
     @GetMapping("/basket-items")
-    public ResponseEntity<List<BasketItem>> getBasketItems(@RequestParam String username) {
+    public ResponseEntity<List<BasketItemDTO>> getBasketItems(@RequestParam String username) {
         return ResponseEntity.ok(serviceClient.getBasketItems(username));
     }
 
@@ -101,13 +102,13 @@ public class ClientController {
     }
 
     @PostMapping("/remove-book-from-basket")
-    public ResponseEntity<Void> removeBookFromBasket(@RequestBody BookInfo book, @RequestParam String username) {
+    public ResponseEntity<Void> removeBookFromBasket(@RequestBody BasketItemDTO book,  @RequestParam String username) {
         serviceClient.removeBookFromBasket(book, username);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/update-book-quantity")
-    public ResponseEntity<Void> updateBookQuantity(@RequestBody BookInfo book, @RequestParam int quantity, @RequestParam String username) {
+    public ResponseEntity<Void> updateBookQuantity(@RequestBody BasketItemDTO book, @RequestParam int quantity, @RequestParam String username) {
         serviceClient.updateBookQuantity(book, quantity, username);
         return ResponseEntity.ok().build();
     }

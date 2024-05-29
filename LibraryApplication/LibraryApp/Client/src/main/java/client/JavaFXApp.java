@@ -15,6 +15,7 @@ public class JavaFXApp extends Application  {
     private ClientWebSocket clientWebSocket;
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         WebSocketManager.getInstance().connect();
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/views/logIn-view.fxml"));

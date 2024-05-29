@@ -129,6 +129,7 @@ public class SignUpController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedBirthday = birthdayTimestamp.format(formatter);
         sendRegistrationRequest(username, password, confPassword, email, firstName, lastName, cpn, address, phone, formattedBirthday, gender);
+
     }
 
     private void sendRegistrationRequest(String username, String password, String confPassword, String email, String firstName, String lastName, String cpn, String address, String phone, String birthday, String gender) {
@@ -151,9 +152,11 @@ public class SignUpController {
                         MessageAlert.showMessage(null, Alert.AlertType.ERROR, "Error", "Could not register");
                         return null;
                     });
+            MessageAlert.showMessage(null, Alert.AlertType.INFORMATION, "Success", "Registration successful");
+
         } catch (Exception e) {
             MessageAlert.showMessage(null, Alert.AlertType.ERROR, "Error", "Could not register");
-            e.printStackTrace();
+            return;
         }
     }
 
