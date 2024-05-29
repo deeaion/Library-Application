@@ -13,34 +13,34 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Subscriber extends Person {
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.MERGE)
     @JoinColumn(name = "credentials_id", referencedColumnName = "user_id")
     private Credentials credentials;
 
     @Column(name = "date_of_subscription")
     private LocalDateTime dateOfSubscription;
 
-    @Column(name = "unique_code", nullable = false)
+    @Column(name = "unique_code")
     private String uniqueCode;
 
-    @OneToMany(mappedBy = "subscriberOfBasket", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BasketItem> shoppingBasket;
+    @OneToMany(mappedBy = "subscriberOfBasket", fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
+    private List<BasketItem> shoppingBasket = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade=CascadeType.MERGE,fetch = FetchType.EAGER)
     @JoinTable(
             name = "CurrentRentals",
             joinColumns = @JoinColumn(name = "subscriber_id"),
             inverseJoinColumns = @JoinColumn(name = "rental_id")
     )
-    private List<Rental> currentRentals;
+    private List<Rental> currentRentals = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade=CascadeType.MERGE)
     @JoinTable(
             name = "PreviousRentals",
             joinColumns = @JoinColumn(name = "subscriber_id"),
             inverseJoinColumns = @JoinColumn(name = "rental_id")
     )
-    private List<Rental> previousRentals;
+    private List<Rental> previousRentals = new ArrayList<>();
 
     public Subscriber() {}
 
@@ -54,7 +54,13 @@ public class Subscriber extends Person {
         this.currentRentals = new ArrayList<>();
         this.shoppingBasket = new ArrayList<>();
     }
-
+    public void addCurrentRental(Rental rental) {
+        if (currentRentals == null) {
+            currentRentals = new ArrayList<>();
+        }
+        currentRentals.add(rental);
+        rental.setRented_by(this.credentials);
+    }
     public Credentials getCredentials() {
         return credentials;
     }

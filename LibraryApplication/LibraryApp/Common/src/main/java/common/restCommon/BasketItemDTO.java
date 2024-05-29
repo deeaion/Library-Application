@@ -1,7 +1,6 @@
-package server.service.restHelping;
+package common.restCommon;
 
-
-import server.model.BookInfo;
+import common.model.BookInfo;
 
 public class BasketItemDTO {
     private Long id;
@@ -10,7 +9,7 @@ public class BasketItemDTO {
     private SubscriberDTO subscriberOfBasket;
     public BasketItemDTO() {
     }
-    public BasketItemDTO(Long id, BookInfo book, int quantity, SubscriberDTO subscriberOfBasket) {
+    public BasketItemDTO(Long id,BookInfo book, int quantity, SubscriberDTO subscriberOfBasket) {
         this.id = id;
         this.book = book;
         this.quantity = quantity;

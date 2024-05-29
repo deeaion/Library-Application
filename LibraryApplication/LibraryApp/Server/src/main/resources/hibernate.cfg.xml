@@ -21,6 +21,8 @@
 
         <!-- Drop and re-create the database schema on startup -->
         <property name="hibernate.hbm2ddl.auto">update</property>
+        <!--Set auto commit tru-->
+        <property name="hibernate.connection.autocommit">true</property>
 
         <!-- Annotated classes -->
         <mapping class="server.model.Subscriber"/>

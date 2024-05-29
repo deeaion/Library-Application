@@ -9,10 +9,13 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import server.model.Person;
 import server.model.Person;
+import server.model.Validators.PersonValidator;
+import server.model.Validators.ValidatorException;
 import server.persistance.interfaces.IPersonRepository;
 import server.persistance.utils.DBUtils;
 
@@ -24,6 +27,8 @@ public class PersonRepository implements IPersonRepository {
     private DBUtils dbUtils;
     private static final Logger logger= LogManager.getLogger();
     private static SessionFactory sessionFactory;
+    @Autowired
+    private PersonValidator personValidator;
 
     public static SessionFactory getSession() {
         logger.traceEntry();
@@ -122,6 +127,11 @@ public class PersonRepository implements IPersonRepository {
     public Person add(Person obj) {
         if (obj == null)
             return null;
+        try {
+            personValidator.validate(obj);
+        } catch (ValidatorException e) {
+            logger.error(e);
+        }
         logger.traceEntry();
         Session session = getSession().openSession();
         Transaction tx = null;

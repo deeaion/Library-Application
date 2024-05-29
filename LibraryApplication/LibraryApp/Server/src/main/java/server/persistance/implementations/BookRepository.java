@@ -138,7 +138,13 @@ public class BookRepository implements IBookRepository {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.persist(obj);
+            if (obj.getId() != null) {
+                session.merge(obj);
+            } else {
+                session.persist(obj);
+            }
+
+
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {

@@ -6,6 +6,7 @@ import client.RestCommunication.WebSocketMessageListener;
 import client.RestCommunication.services.ClientService;
 import client.RestCommunication.utils.ClientNotificationParser;
 import client.RestCommunication.utils.NotificationDetails;
+import client.ViewControllers.MessageAlert;
 import common.model.BookInfo;
 import common.model.CredentialsDTO;
 import common.model.Enums.BookType;
@@ -16,10 +17,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -172,7 +170,8 @@ public class SubscriberMainController implements WebSocketMessageListener {
                 List<BookInfo> books = clientService.filterBooksByCriteria(filters, values);
                 Platform.runLater(() -> displayMoreBooks(books));
             } catch (Exception e) {
-                e.printStackTrace();
+               MessageAlert.showMessage(null, Alert.AlertType.ERROR, "Error", "Error loading filtered books");
+            return;
             }
         });
 
@@ -198,7 +197,8 @@ public class SubscriberMainController implements WebSocketMessageListener {
                 Map<BookType, List<BookInfo>> topBooksCategories = clientService.getTopBooksCategories();
                 Platform.runLater(() -> displayTopBooksCategories(topBooksCategories));
             } catch (Exception e) {
-                e.printStackTrace();
+                MessageAlert.showMessage(null, Alert.AlertType.ERROR, "Error", "Error loading top books categories");
+                return;
             }
         });
     }
@@ -250,7 +250,8 @@ public class SubscriberMainController implements WebSocketMessageListener {
                         try {
                             showBookDetails(book);
                         } catch (Exception exception) {
-                            exception.printStackTrace();
+                            MessageAlert.showMessage(null, Alert.AlertType.ERROR, "Error", "Error loading book details");
+                            return;
                         }
                     });
                     hBox.getChildren().add(bookBox);
@@ -279,7 +280,8 @@ public class SubscriberMainController implements WebSocketMessageListener {
                 List<BookInfo> books = clientService.filterBooksByCriteria(List.of("type"), List.of(genre.toString()));
                 Platform.runLater(() -> displayMoreBooks(books));
             } catch (Exception e) {
-                e.printStackTrace();
+               MessageAlert.showMessage(null, Alert.AlertType.ERROR, "Error", "Error loading more books");
+                return;
             }
         });
     }
@@ -319,7 +321,8 @@ public class SubscriberMainController implements WebSocketMessageListener {
                    try {
                        showBookDetails(book);
                    } catch (Exception exception) {
-                       exception.printStackTrace();
+                       MessageAlert.showMessage(null, Alert.AlertType.ERROR, "Error", "Error loading book details");
+                       return;
                    }
                });
                hBox.getChildren().add(bookBox);
@@ -336,10 +339,12 @@ public class SubscriberMainController implements WebSocketMessageListener {
         try {
             root = fxmlLoader.load();
         } catch (Exception e) {
-            e.printStackTrace();
+            MessageAlert.showMessage(null, Alert.AlertType.ERROR, "Error", "Error loading book details");
+            return;
         }
         SubscriberViewBookController controller = fxmlLoader.<SubscriberViewBookController>getController();
         controller.setBook(book,clientService,credentials);
+
         stageBook.setTitle("Book Details");
        stageBook.setScene(new Scene(root ));
         stageBook.show();
@@ -352,6 +357,7 @@ public class SubscriberMainController implements WebSocketMessageListener {
         Platform.runLater(() -> {
             System.out.println("Notification received: " + message);
             NotificationDetails notificationDetails = ClientNotificationParser.parseNotifcation(message);
+            assert notificationDetails != null;
             if(notificationDetails.getNotification().equals(NotificationRest.BASKETUPDATED))
             {
                 setBasketItemsCount();
@@ -382,7 +388,8 @@ public class SubscriberMainController implements WebSocketMessageListener {
         try {
             root = fxmlLoader.load();
         } catch (Exception e) {
-            e.printStackTrace();
+            MessageAlert.showMessage(null, Alert.AlertType.ERROR, "Error", "Error loading cart");
+            return;
         }
         SubscriberCartController controller = fxmlLoader.<SubscriberCartController>getController();
         controller.setSubscriber(stage, credentials,clientService);

@@ -10,14 +10,14 @@ import java.util.Objects;
 })
 public class BasketItem extends Identifiable<Long> {
     @ManyToOne
-    @JoinColumn(name = "book_id") // Foreign key to BookInfo
+    @JoinColumn(name = "book_id")
     private BookInfo book;
 
     @Column(name = "number_of_items")
     private int quantity;
 
     @ManyToOne
-    @JoinColumn(name = "subscriber_of_basket_id", referencedColumnName = "id")
+    @JoinColumn(name = "subscriber_of_basket_id")
     private Subscriber subscriberOfBasket;
 
     public BasketItem(BookInfo book, int quantity, Subscriber subscriberOfBasket) {

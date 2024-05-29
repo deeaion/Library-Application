@@ -3,6 +3,7 @@ package server.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,13 +25,19 @@ public class Rental extends Identifiable<Long>  {
     @ManyToOne
     @JoinColumn(name="retrieved_by", referencedColumnName = "user_id")
     private Credentials retrieved_by;
-    @ManyToMany
+    @ManyToMany(cascade=CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinTable(
             name = "bookrented",
             joinColumns = @JoinColumn(name = "rental_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id"))
     private List<Book> books;
-
+    public void addSubscriber(Subscriber subscriber) {
+        if (rented_by == null) {
+            rented_by = subscriber.getCredentials();
+        }
+        rented_by= subscriber.getCredentials();
+        subscriber.getCurrentRentals().add(this);
+    }
     public List<Book> getBooks() {
         return books;
     }
@@ -76,5 +83,6 @@ public class Rental extends Identifiable<Long>  {
         this.ended_at = ended_at;
         this.rented_by = rented_by;
         this.retrieved_by = retrieved_by;
+        this.books=new ArrayList<>();
     }
 }
