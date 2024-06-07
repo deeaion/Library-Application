@@ -12,5 +12,12 @@ C:/Users/Deea/Desktop/New folder (5)/Library-Application/LibraryApplication/Libr
       <jdbc-url>jdbc:postgresql://localhost:5432/library_application</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="postgres@localhost" uuid="a8bcddb5-88fd-41a5-83dd-0797a359e3e1">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/postgres</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

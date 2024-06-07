@@ -165,9 +165,12 @@ public class SubscriberRepository implements ISubscriberRepository {
         try {
             tx = session.beginTransaction();
 
-            Query<Rental> query = session.createQuery("from Subscriber as s left join s.currentRentals where s.credentials.username=:username", Rental.class);
+            Query<Subscriber> query = session.createQuery("from Subscriber as s left join fetch s.currentRentals where s.credentials.username=:username", Subscriber.class);
             query.setParameter("username", username);
-            rentals = query.list();
+            Subscriber subscriber = query.uniqueResult();
+            if (subscriber != null) {
+                rentals = subscriber.getCurrentRentals();
+            }
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
@@ -189,9 +192,12 @@ public class SubscriberRepository implements ISubscriberRepository {
         List<Rental> rentals = new ArrayList<>();
         try {
             tx = session.beginTransaction();
-            Query<Rental> query = session.createQuery("from Subscriber as s left join s.previousRentals where s.credentials.username=:username", Rental.class);
+            Query<Subscriber> query = session.createQuery("from Subscriber as s left join fetch s.previousRentals where s.credentials.username=:username", Subscriber.class);
             query.setParameter("username", username);
-            rentals = query.list();
+            Subscriber subscriber = query.uniqueResult();
+            if (subscriber != null) {
+                rentals = subscriber.getPreviousRentals();
+            }
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
@@ -204,8 +210,7 @@ public class SubscriberRepository implements ISubscriberRepository {
         logger.traceExit(rentals);
         return rentals;
     }
-
-    @Override
+        @Override
     public Subscriber add(Subscriber obj) {
         if (obj == null) return null;
         logger.traceEntry();
@@ -271,7 +276,7 @@ public class SubscriberRepository implements ISubscriberRepository {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.update(obj);
+            session.merge(obj);
             tx.commit();
 //            session.flush();
 

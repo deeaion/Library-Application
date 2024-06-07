@@ -98,9 +98,16 @@ public class Subscriber extends Person {
     }
 
     public void setCurrentRentals(List<Rental> currentRentals) {
+        currentRentals.clear();
         this.currentRentals = currentRentals;
     }
-
+    public void removeCurrentRental(Rental rental) {
+        if (currentRentals == null) {
+            currentRentals = new ArrayList<>();
+        }
+        currentRentals.remove(rental);
+        rental.setEnded_at(LocalDateTime.now());
+    }
     public List<Rental> getPreviousRentals() {
         return previousRentals;
     }

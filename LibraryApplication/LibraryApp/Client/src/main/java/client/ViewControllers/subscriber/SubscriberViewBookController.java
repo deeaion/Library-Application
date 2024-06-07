@@ -1,8 +1,7 @@
 package client.ViewControllers.subscriber;
 
-import client.RestCommunication.ClientWebSocket;
-import client.RestCommunication.WebSocketManager;
-import client.RestCommunication.WebSocketMessageListener;
+import client.RestCommunication.webSocket.client.ClientWebSocketManager;
+import client.RestCommunication.webSocket.WebSocketMessageListener;
 import client.RestCommunication.services.ClientService;
 import client.ViewControllers.MessageAlert;
 import common.model.BookInfo;
@@ -25,23 +24,11 @@ public class SubscriberViewBookController implements WebSocketMessageListener {
         this.credentials = credentials;
         setComponents();
         setBookInfo();
-        WebSocketManager.getInstance().addListener(this);
+        ClientWebSocketManager.getInstance().addListener(this);
 //        subscribeToNotifications();''
 
     }
-//    private void subscribeToNotifications() {
-//        clientWebSocket.getSession().subscribe("/topic/notifications", new StompFrameHandler() {
-//            @Override
-//            public Type getPayloadType(StompHeaders headers) {
-//                return String.class;
-//            }
-//
-//            @Override
-//            public void handleFrame(StompHeaders headers, Object payload) {
-//                Platform.runLater(() -> updateSpinnerMax());
-//            }
-//        });
-//    }
+
 
     private void updateSpinnerMax() {
         try {
@@ -140,6 +127,8 @@ public class SubscriberViewBookController implements WebSocketMessageListener {
 
 
 }
+
+
 
     @Override
     public void onMessageReceived(String message) {

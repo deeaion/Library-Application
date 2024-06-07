@@ -1,6 +1,5 @@
 package client.ViewControllers;
 
-import client.RestCommunication.ClientWebSocket;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

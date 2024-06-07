@@ -113,6 +113,19 @@ public class LibrarianRepository implements ILibrarianRepository {
     }
 
     @Override
+    public Librarian findByUsername(String username) {
+        List<String> Attributes = new ArrayList<>();
+        List<Object> Values = new ArrayList<>();
+        Attributes.add("credentials.username");
+        Values.add(username);
+        List<Librarian> librarians = findAllUtil(Attributes, Values);
+        if (librarians.size() == 0) {
+            return null;
+        }
+        return librarians.get(0);
+    }
+
+    @Override
     public Librarian findByUniqueCode(String uniqueCode) {
         List<String> Attributes = new ArrayList<>();
         List<Object> Values = new ArrayList<>();

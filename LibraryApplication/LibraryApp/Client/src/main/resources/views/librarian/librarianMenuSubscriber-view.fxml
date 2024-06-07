@@ -1,14 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="client.ViewControllers.librarian.LibrarianMenuSubscriberController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="627.0" prefWidth="822.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.ViewControllers.librarian.LibrarianMenuSubscriberController">
+   <children>
+      <HBox fx:id="btnShowInfo" alignment="CENTER" layoutX="53.0" layoutY="129.0" onMouseClicked="#handleShowInfo" prefHeight="112.0" prefWidth="725.0" style="-fx-background-color: #d5c5ae;">
+         <children>
+            <Label prefHeight="110.0" prefWidth="581.0" text="SHOW SUBSCRIBER INFORMATION">
+               <font>
+                  <Font name="Agency FB" size="39.0" />
+               </font>
+            </Label>
+            <ImageView blendMode="COLOR_DODGE" cache="true" cacheHint="SPEED" fitHeight="90.0" fitWidth="90.0" opacity="0.6" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/icons/simple_right_arrow.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+      <Label layoutX="10.0" layoutY="10.0" prefHeight="110.0" prefWidth="581.0" text="SHOW SUBSCRIBER INFORMATION">
+         <font>
+            <Font name="Agency FB" size="39.0" />
+         </font>
+      </Label>
+      <HBox fx:id="btnShowRentals" alignment="CENTER" layoutX="53.0" layoutY="283.0" onMouseClicked="#handleShowRentals" prefHeight="112.0" prefWidth="725.0" style="-fx-background-color: #d5c5ae;">
+         <children>
+            <Label prefHeight="110.0" prefWidth="581.0" text="SHOW SUBSCRIBER RENTALS">
+               <font>
+                  <Font name="Agency FB" size="39.0" />
+               </font>
+            </Label>
+            <ImageView blendMode="COLOR_DODGE" cache="true" cacheHint="SPEED" fitHeight="90.0" fitWidth="90.0" opacity="0.6" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/icons/simple_right_arrow.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+   </children>
 </AnchorPane>

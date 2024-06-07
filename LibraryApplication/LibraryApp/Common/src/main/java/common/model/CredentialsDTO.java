@@ -7,6 +7,7 @@ public class CredentialsDTO extends Credentials {
     public CredentialsDTO(Credentials credentials, String type) {
         super(credentials.getUsername(), credentials.getPassword(), credentials.getEmail(), credentials.getSeed());
         this.type = type;
+        this.setId(credentials.getId());
     }
 
     public CredentialsDTO(String username, String password, String email, String seed, String type) {

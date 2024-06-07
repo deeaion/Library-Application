@@ -68,11 +68,13 @@ public class ServiceCommon implements IServiceCommon {
         Credentials credentials= credentialsRepository.findByEmail(username);
         if (credentials != null) {
             credentialsDTO = new CredentialsDTO(credentials, "none");
+            credentialsDTO.setId(credentials.getId());
 
             try {
                 if (PasswordEncryption.verifyPassword(password, credentialsDTO.getPassword(), credentialsDTO.getSeed())) {
                     found = true;
                     credentialsDTO = findTypeOfUser(credentialsDTO);
+
                     return credentialsDTO;
                 }
             } catch (NoSuchAlgorithmException e) {
@@ -84,6 +86,7 @@ public class ServiceCommon implements IServiceCommon {
         if (credentials != null) {
             try {
                 credentialsDTO = new CredentialsDTO(credentials, "none");
+                credentialsDTO.setId(credentials.getId());
                 if (PasswordEncryption.verifyPassword(password, credentialsDTO.getPassword(), credentialsDTO.getSeed())) {
                     found = true;
                     credentialsDTO = findTypeOfUser(credentialsDTO);
@@ -107,7 +110,7 @@ public class ServiceCommon implements IServiceCommon {
             credentialsDTO.setType("subscriber");
             return credentialsDTO;
         }
-        if (librarianRepository.findByUserId(credentialsDTO.getId()) != null) {
+        if (librarianRepository.findByUsername(credentialsDTO.getUsername()) != null) {
             credentialsDTO.setType("librarian");
             return credentialsDTO;
         }

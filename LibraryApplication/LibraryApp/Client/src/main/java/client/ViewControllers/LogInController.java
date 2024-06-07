@@ -1,6 +1,5 @@
 package client.ViewControllers;
 
-import client.RestCommunication.ClientWebSocket;
 import client.ViewControllers.admin.AdminMainController;
 import client.ViewControllers.librarian.LibrarianMainController;
 import client.ViewControllers.subscriber.SubscriberMainController;
@@ -34,7 +33,7 @@ public class LogInController {
 
     @FXML
     private PasswordField txtPassword;
-    private ClientWebSocket clientWebSocket;
+
     @FXML
     private TextField txtUsername;
     private String URI_WebSocket = "ws://localhost:8080/websocket-endpoint";
@@ -100,6 +99,7 @@ public class LogInController {
         }
         LibrarianMainController controller = fxmlLoader.<LibrarianMainController>getController();
         controller.setLibrarian(stage, credentials);
+        System.out.println(credentials);
         stage.setTitle("Librarian");
         stage.setScene(new Scene(root ));
         stage.show();
@@ -129,7 +129,7 @@ public class LogInController {
 
         }
         AdminMainController controller = fxmlLoader.<AdminMainController>getController();
-        //controller.setAdmin(stage, credentials);
+        controller.setAdmin(stage, credentials);
         stage.setTitle("Admin");
         stage.setScene(new Scene(root ));
         stage.show();

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="627.0" prefWidth="822.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libraryapp.Controller.librarian.LibrarianShowSubscriberController">
+<AnchorPane prefHeight="627.0" prefWidth="822.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.ViewControllers.librarian.LibrarianShowSubscriberController">
    <children>
       <VBox layoutX="90.0" layoutY="42.0" prefHeight="469.0" prefWidth="641.0" style="-fx-background-color: #47596f; -fx-border-color: #d5c5af; -fx-border-width: 5;">
          <children>
@@ -27,7 +27,7 @@
                         <Font name="Agency FB" size="36.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="443.0" text="the id" textFill="#d5ccbf">
+                  <Label fx:id="txtID" alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="443.0" text="the id" textFill="#d5ccbf">
                      <font>
                         <Font name="Agency FB" size="36.0" />
                      </font>
@@ -41,7 +41,7 @@
                         <Font name="Agency FB" size="36.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the username" textFill="#d5ccbf">
+                  <Label fx:id="txtUsername" alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the username" textFill="#d5ccbf">
                      <font>
                         <Font name="Agency FB" size="36.0" />
                      </font>
@@ -55,7 +55,7 @@
                         <Font name="Agency FB" size="36.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the date" textFill="#d5ccbf">
+                  <Label fx:id="txtEmail" alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the date" textFill="#d5ccbf">
                      <font>
                         <Font name="Agency FB" size="36.0" />
                      </font>
@@ -79,7 +79,7 @@
                         <Font name="Agency FB" size="36.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the first name" textFill="#d5ccbf">
+                  <Label fx:id="txtFName" alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the first name" textFill="#d5ccbf">
                      <font>
                         <Font name="Agency FB" size="36.0" />
                      </font>
@@ -93,7 +93,7 @@
                         <Font name="Agency FB" size="36.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the last name" textFill="#d5ccbf">
+                  <Label fx:id="txtLName" alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the last name" textFill="#d5ccbf">
                      <font>
                         <Font name="Agency FB" size="36.0" />
                      </font>
@@ -107,7 +107,7 @@
                         <Font name="Agency FB" size="36.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the date" textFill="#d5ccbf">
+                  <Label fx:id="txtDate" alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the date" textFill="#d5ccbf">
                      <font>
                         <Font name="Agency FB" size="36.0" />
                      </font>
@@ -121,7 +121,7 @@
                         <Font name="Agency FB" size="36.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the birthday" textFill="#d5ccbf">
+                  <Label fx:id="txtBDay" alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the birthday" textFill="#d5ccbf">
                      <font>
                         <Font name="Agency FB" size="36.0" />
                      </font>
@@ -135,7 +135,7 @@
                         <Font name="Agency FB" size="36.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the cpn/cnp" textFill="#d5ccbf">
+                  <Label fx:id="txtCPN" alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="the cpn/cnp" textFill="#d5ccbf">
                      <font>
                         <Font name="Agency FB" size="36.0" />
                      </font>
@@ -149,7 +149,7 @@
                         <Font name="Agency FB" size="36.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="address" textFill="#d5ccbf">
+                  <Label fx:id="txtAddress" alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="address" textFill="#d5ccbf">
                      <font>
                         <Font name="Agency FB" size="36.0" />
                      </font>
@@ -163,7 +163,7 @@
                         <Font name="Agency FB" size="36.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="phone number" textFill="#d5ccbf">
+                  <Label fx:id="txtPhone" alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="511.0" text="phone number" textFill="#d5ccbf">
                      <font>
                         <Font name="Agency FB" size="36.0" />
                      </font>

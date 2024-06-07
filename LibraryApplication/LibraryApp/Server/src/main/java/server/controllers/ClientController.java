@@ -23,7 +23,14 @@ public class ClientController {
 
     @PostMapping("/finish-order")
     public ResponseEntity<Void> finishOrder(@RequestParam String username) {
-        serviceClient.finishOrder(username);
+        try
+        {
+            serviceClient.finishOrder(username);
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok().build();
     }
     @PostMapping("/register")
