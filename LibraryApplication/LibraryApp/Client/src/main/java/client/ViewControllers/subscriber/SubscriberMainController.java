@@ -1,8 +1,6 @@
 package client.ViewControllers.subscriber;
-import client.RestCommunication.ClientWebSocket;
-import client.RestCommunication.NotificationManager;
-import client.RestCommunication.WebSocketManager;
-import client.RestCommunication.WebSocketMessageListener;
+import client.RestCommunication.webSocket.client.ClientWebSocketManager;
+import client.RestCommunication.webSocket.WebSocketMessageListener;
 import client.RestCommunication.services.ClientService;
 import client.RestCommunication.utils.ClientNotificationParser;
 import client.RestCommunication.utils.NotificationDetails;
@@ -38,7 +36,8 @@ public class SubscriberMainController implements WebSocketMessageListener {
     private boolean filterVisible = false;
     public void setSubscriber(Stage stage, CredentialsDTO credentials) {
         this.stage = stage;
-        WebSocketManager.getInstance().addListener(this);
+        ClientWebSocketManager.getInstance().connect();
+        ClientWebSocketManager.getInstance().addListener(this);
         this.credentials = credentials;
         this.txtNameOfUser.setText(credentials.getUsername());
         this.clientService = new ClientService();

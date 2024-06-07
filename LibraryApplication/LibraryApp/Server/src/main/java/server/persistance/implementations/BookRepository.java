@@ -141,7 +141,7 @@ public class BookRepository implements IBookRepository {
             if (obj.getId() != null) {
                 session.merge(obj);
             } else {
-                session.persist(obj);
+                session.save(obj);
             }
 
 

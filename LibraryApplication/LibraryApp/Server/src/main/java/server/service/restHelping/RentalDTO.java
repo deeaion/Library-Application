@@ -1,17 +1,33 @@
 package server.service.restHelping;
 
-
 import server.model.Book;
 import server.model.CredentialsDTO;
 
 import java.util.List;
-
 public class RentalDTO {
     private String startedAt;  // LocalDateTime as String
     private String endedAt;    // LocalDateTime as String
+    private long id;
+
+    @Override
+    public String toString() {
+        return "RentalDTO{" +
+                "rentedBy=" + rentedBy.getUsername() +
+                ", data=" + startedAt +
+                '}';
+    }
+
     private CredentialsDTO rentedBy;
     private CredentialsDTO retrievedBy;
     private List<Book> books;
+
+    public RentalDTO(String startedAt, String endedAt, CredentialsDTO rentedBy, CredentialsDTO retrievedBy, List<Book> books) {
+        this.startedAt = startedAt;
+        this.endedAt = endedAt;
+        this.rentedBy = rentedBy;
+        this.retrievedBy = retrievedBy;
+        this.books = books;
+    }
 
     // Getters and Setters
     public RentalDTO() {
@@ -54,5 +70,13 @@ public class RentalDTO {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

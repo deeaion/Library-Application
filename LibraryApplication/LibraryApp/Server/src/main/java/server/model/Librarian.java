@@ -14,9 +14,7 @@ import java.time.LocalDateTime;
 
 @Table(name = "librarian")
 
-@AttributeOverrides({
-        @AttributeOverride(name = "id", column = @Column(name = "librarian_id"))
-})
+
 public class Librarian extends Identifiable<Long> {
     @OneToOne
     @JoinColumn(name = "credentials_id", referencedColumnName = "user_id")
@@ -26,13 +24,23 @@ public class Librarian extends Identifiable<Long> {
     private LocalDateTime hireDate;
 
     @OneToOne
-    @JoinColumn(name = "librarian_id",referencedColumnName = "person_id")
+    @MapsId
+    @JoinColumn(name = "id")
     private Person person;
 
     @Column(name = "unique_code", unique = true, length = 50)
     private String uniqueCode;
 
+    public Librarian() {
+    }
     // Getters and setters
+
+    public Librarian(Credentials credentials, LocalDateTime hireDate, Person person, String uniqueCode) {
+        this.credentials = credentials;
+        this.hireDate = hireDate;
+        this.person = person;
+        this.uniqueCode = uniqueCode;
+    }
 
     public void setCredentials(Credentials credentials) {
         this.credentials = credentials;

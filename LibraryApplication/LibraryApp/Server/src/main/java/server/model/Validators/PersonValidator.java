@@ -23,9 +23,9 @@ public class PersonValidator implements Validator<Person> {
             throw new ValidatorException("Last name cannot be null or empty");
         }
 
-        if (person.getBirthDay() == null || person.getBirthDay().isAfter(LocalDateTime.now())) {
-            throw new ValidatorException("Invalid birth date");
-        }
+//        if (person.getBirthDay() == null || person.getBirthDay().isAfter(LocalDateTime.now())) {
+//            throw new ValidatorException("Invalid birth date");
+//        }
 
         if (person.getGender() == null || person.getGender().isEmpty()) {
             throw new ValidatorException("Gender cannot be null or empty");

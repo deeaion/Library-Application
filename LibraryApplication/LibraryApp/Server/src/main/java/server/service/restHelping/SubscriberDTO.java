@@ -1,50 +1,41 @@
 package server.service.restHelping;
 
-
-
 import server.model.CredentialsDTO;
 
 import java.util.List;
 
 public class SubscriberDTO {
     private CredentialsDTO credentials;
+    private String dateOfSubscription;
+    private String uniqueCode;
+    private long id;
+    private String cpn;
+    private String gender;
+    private String firstName;
+    private String lastName;
+    private String birthDate;
+    private String address;
+    private String phoneNumber;
+
     public SubscriberDTO() {
     }
 
-    private String dateOfSubscription;
-
-    private String uniqueCode;
-    private long id;
-
-    private List<BasketItemDTO> shoppingBasket;
-    private List<RentalDTO> currentRentals;
-
-    public List<RentalDTO> getCurrentRentals() {
-        return currentRentals;
-    }
-
-    public void setCurrentRentals(List<RentalDTO> currentRentals) {
-        this.currentRentals = currentRentals;
-    }
-
-    public List<RentalDTO> getPreviousRentals() {
-        return previousRentals;
-    }
-
-    public void setPreviousRentals(List<RentalDTO> previousRentals) {
-        this.previousRentals = previousRentals;
-    }
-
-    private List<RentalDTO> previousRentals;
-
-    public SubscriberDTO(Long id,CredentialsDTO credentials, String dateOfSubscription, String uniqueCode, List<BasketItemDTO> shoppingBasket) {
+    public SubscriberDTO(CredentialsDTO credentials, String dateOfSubscription, String uniqueCode, long id, String cpn, String firstName, String lastName, String birthDate, String address, String phoneNumber,
+                        String gender ) {
         this.credentials = credentials;
         this.dateOfSubscription = dateOfSubscription;
         this.uniqueCode = uniqueCode;
-        this.shoppingBasket = shoppingBasket;
-        this.id=id;
+        this.id = id;
+        this.cpn = cpn;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.gender=gender;
     }
 
+    // Getters and Setters
     public CredentialsDTO getCredentials() {
         return credentials;
     }
@@ -69,19 +60,69 @@ public class SubscriberDTO {
         this.uniqueCode = uniqueCode;
     }
 
-    public List<BasketItemDTO> getShoppingBasket() {
-        return shoppingBasket;
-    }
-
-    public void setShoppingBasket(List<BasketItemDTO> shoppingBasket) {
-        this.shoppingBasket = shoppingBasket;
-    }
-
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getCpn() {
+        return cpn;
+    }
+
+    public void setCpn(String cpn) {
+        this.cpn = cpn;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

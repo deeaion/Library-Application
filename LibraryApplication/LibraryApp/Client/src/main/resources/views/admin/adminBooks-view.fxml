@@ -15,23 +15,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="696.0" prefWidth="895.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.ViewControllers.admin.AdminBooksController">
    <children>
       <ScrollPane layoutX="14.0" layoutY="80.0">
          <content>
-            <TableView prefHeight="284.0" prefWidth="871.0">
+            <TableView fx:id="tblBook" prefHeight="284.0" prefWidth="871.0">
               <columns>
-                <TableColumn prefWidth="100.0" text="TITLE" />
-                <TableColumn prefWidth="89.33331298828125" text="ISBC" />
-                  <TableColumn prefWidth="60.0" text="AUTHOR" />
-                  <TableColumn prefWidth="79.33331298828125" text="PUBLISHER" />
-                  <TableColumn prefWidth="88.0" text="LANGUAGE" />
-                  <TableColumn prefWidth="98.6666259765625" text="TYPE" />
-                  <TableColumn prefWidth="106.00006103515625" text="DESCRIPTION" />
-                  <TableColumn prefWidth="73.33331298828125" text="IMAGE" />
-                  <TableColumn prefWidth="110.6666259765625" text="GENRE" />
-                  <TableColumn prefWidth="64.666748046875" text="COPIES" />
+                <TableColumn fx:id="colTitle" prefWidth="100.0" text="TITLE" />
+                <TableColumn fx:id="colISBC" prefWidth="89.33331298828125" text="ISBC" />
+                  <TableColumn fx:id="colAuthor" prefWidth="60.0" text="AUTHOR" />
+                  <TableColumn fx:id="colPublisher" prefWidth="79.33331298828125" text="PUBLISHER" />
+                  <TableColumn fx:id="colLanguage" prefWidth="88.0" text="LANGUAGE" />
+                  <TableColumn fx:id="colType" prefWidth="98.6666259765625" text="TYPE" />
+                  <TableColumn fx:id="colDesc" prefWidth="106.00006103515625" text="DESCRIPTION" />
+                  <TableColumn fx:id="colImg" prefWidth="73.33331298828125" text="IMAGE" />
+                  <TableColumn fx:id="colGenre" prefWidth="110.6666259765625" text="GENRE" />
+                  <TableColumn fx:id="colCopies" prefWidth="64.666748046875" text="COPIES" />
               </columns>
             </TableView>
          </content>
@@ -43,7 +42,7 @@
       </Label>
       <ScrollPane layoutX="684.0" layoutY="398.0">
          <content>
-            <ListView prefHeight="200.0" prefWidth="197.0" />
+            <ListView fx:id="listBooks" prefHeight="200.0" prefWidth="197.0" />
          </content>
       </ScrollPane>
       <Label layoutX="689.0" layoutY="372.0" prefHeight="21.0" prefWidth="53.0" text="UNITS">
@@ -71,7 +70,7 @@
          </children>
       </VBox>
       <Label layoutX="760.0" layoutY="373.0" prefHeight="25.0" prefWidth="30.0" text="NR:" />
-      <Label layoutX="790.0" layoutY="377.0" prefHeight="17.0" prefWidth="79.0" text="X" />
+      <Label fx:id="nrOfUnits" layoutX="790.0" layoutY="377.0" prefHeight="17.0" prefWidth="79.0" text="X" />
       <HBox layoutX="14.0" layoutY="394.0" prefHeight="150.0" prefWidth="651.0">
          <children>
             <VBox prefHeight="126.0" prefWidth="334.0">
@@ -83,7 +82,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="244.0" />
+                        <TextField fx:id="txtTitle" prefHeight="25.0" prefWidth="244.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="29.0" prefWidth="235.0">
@@ -93,7 +92,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="244.0" />
+                        <TextField fx:id="txtISBC" prefHeight="25.0" prefWidth="244.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="29.0" prefWidth="235.0">
@@ -103,7 +102,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="244.0" />
+                        <TextField fx:id="txtAuthor" prefHeight="25.0" prefWidth="244.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="29.0" prefWidth="235.0">
@@ -113,7 +112,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="244.0" />
+                        <TextField fx:id="txtPublisher" prefHeight="25.0" prefWidth="244.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="29.0" prefWidth="235.0">
@@ -123,7 +122,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="244.0" />
+                        <TextField fx:id="txtLanguage" prefHeight="25.0" prefWidth="244.0" />
                      </children>
                   </HBox>
                </children>
@@ -138,7 +137,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <ComboBox prefHeight="25.0" prefWidth="232.0" promptText="book type" />
+                        <ComboBox fx:id="comboType" prefHeight="25.0" prefWidth="232.0" promptText="book type" />
                      </children>
                   </HBox>
                   <HBox prefHeight="29.0" prefWidth="235.0">
@@ -148,7 +147,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="244.0" />
+                        <TextField fx:id="txtDesc" prefHeight="25.0" prefWidth="244.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="29.0" prefWidth="235.0">
@@ -158,7 +157,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="244.0" />
+                        <TextField fx:id="txtImg" prefHeight="25.0" prefWidth="244.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="29.0" prefWidth="235.0">
@@ -168,7 +167,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <Spinner prefHeight="25.0" prefWidth="241.0" />
+                        <Spinner fx:id="spinCopies" prefHeight="25.0" prefWidth="241.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="29.0" prefWidth="235.0">
@@ -178,15 +177,16 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <ComboBox prefHeight="25.0" prefWidth="232.0" promptText="book genre" />
+                        <ComboBox fx:id="comboGenre" prefHeight="25.0" prefWidth="232.0" promptText="book genre" />
                      </children>
                   </HBox>
                </children>
             </VBox>
          </children>
       </HBox>
-      <Button layoutX="104.0" layoutY="586.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="133.0" text="ADD" />
-      <Button layoutX="287.0" layoutY="586.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="133.0" text="MODIFY" />
-      <Button layoutX="472.0" layoutY="586.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="133.0" text="DELETE" />
+      <Button fx:id="btnAdd" layoutX="42.0" layoutY="586.0" mnemonicParsing="false" onAction="#handleAddBook" prefHeight="52.0" prefWidth="133.0" text="ADD" />
+      <Button fx:id="btnModify" layoutX="195.0" layoutY="586.0" mnemonicParsing="false" onAction="#handleModifyBook" prefHeight="52.0" prefWidth="133.0" text="MODIFY" />
+      <Button fx:id="btnDelete" layoutX="364.0" layoutY="586.0" mnemonicParsing="false" onAction="#handleDeleteBook" prefHeight="52.0" prefWidth="133.0" text="DELETE" />
+      <Button fx:id="btnClear" layoutX="531.0" layoutY="586.0" mnemonicParsing="false" onAction="#handleClearFields" prefHeight="52.0" prefWidth="133.0" text="CLEAR" />
    </children>
 </AnchorPane>

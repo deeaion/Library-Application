@@ -20,10 +20,6 @@ public class Subscriber extends Person {
     private String uniqueCode;
 
 
-
-
-
-
     @OneToMany(mappedBy = "subscriberOfBasket", fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
 
 
@@ -104,6 +100,13 @@ public class Subscriber extends Person {
         }
         currentRentals.add(rental);
         rental.setRented_by(this.credentials);
+    }
+    public void removeCurrentRental(Rental rental) {
+        if (currentRentals == null) {
+            currentRentals = new ArrayList<>();
+        }
+        currentRentals.remove(rental);
+        rental.setEnded_at(LocalDateTime.now());
     }
 
 

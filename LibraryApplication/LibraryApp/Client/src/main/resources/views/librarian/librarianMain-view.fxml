@@ -7,11 +7,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="750.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.ViewControllers.librarian.LibrarianMainController">
+<BorderPane fx:id="borderLibrarian" prefHeight="750.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.ViewControllers.librarian.LibrarianMainController">
    <top>
       <AnchorPane prefHeight="29.0" prefWidth="1100.0" style="-fx-background-color: #47596f;" BorderPane.alignment="CENTER">
          <children>
@@ -20,12 +19,12 @@
                   <Font name="Angel wish Regular" size="19.0" />
                </font>
             </Label>
-            <Label layoutX="1020.0" layoutY="10.0" text="\@librarian" textFill="WHITE">
+            <Label fx:id="txtUserName" layoutX="1020.0" layoutY="10.0" text="\@librarian" textFill="WHITE">
                <font>
                   <Font name="Angel wish Regular" size="19.0" />
                </font>
             </Label>
-            <ImageView fitHeight="46.0" fitWidth="48.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="btnBack" fitHeight="46.0" fitWidth="48.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/icons/back_arrow.png" />
                </image>
@@ -36,14 +35,15 @@
    <left>
       <AnchorPane prefHeight="651.0" prefWidth="295.0" style="-fx-background-color: #8fb4e1;" BorderPane.alignment="CENTER">
          <children>
-            <VBox layoutX="7.0" layoutY="170.0" prefHeight="206.0" prefWidth="281.0">
+            <VBox layoutX="7.0" layoutY="170.0" prefHeight="251.0" prefWidth="281.0">
                <children>
                   <Label prefHeight="96.0" prefWidth="281.0" text="Search for Subscriber:" wrapText="true">
                      <font>
                         <Font name="Agency FB Bold" size="39.0" />
                      </font>
                   </Label>
-                  <TextField prefHeight="87.0" prefWidth="281.0" />
+                  <TextField fx:id="txtSubscriberContext" prefHeight="87.0" prefWidth="281.0" />
+                  <Button fx:id="btnSearchSubscriber" mnemonicParsing="false" onAction="#handleSearch" prefHeight="61.0" prefWidth="302.0" text="SEARCH" />
                </children>
             </VBox>
          </children>
@@ -52,7 +52,7 @@
    <bottom>
       <AnchorPane prefHeight="39.0" prefWidth="1100.0" style="-fx-background-color: #47596f;" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="937.0" layoutY="7.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="153.0" text="LOGOUT">
+            <Button fx:id="handleLogOut" layoutX="937.0" layoutY="7.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="153.0" text="LOGOUT">
                <font>
                   <Font name="Agency FB Bold" size="17.0" />
                </font>
@@ -61,37 +61,6 @@
       </AnchorPane>
    </bottom>
    <center>
-      <AnchorPane prefHeight="649.0" prefWidth="803.0" BorderPane.alignment="CENTER">
-         <children>
-            <HBox alignment="CENTER" layoutX="43.0" layoutY="119.0" prefHeight="112.0" prefWidth="725.0" style="-fx-background-color: #d5c5ae;">
-               <children>
-                  <Label prefHeight="110.0" prefWidth="581.0" text="SHOW SUBSCRIBER INFORMATION">
-                     <font>
-                        <Font name="Agency FB" size="39.0" />
-                     </font>
-                  </Label>
-                  <ImageView blendMode="COLOR_DODGE" cache="true" cacheHint="SPEED" fitHeight="90.0" fitWidth="90.0" opacity="0.6" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icons/simple_right_arrow.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" layoutX="43.0" layoutY="273.0" prefHeight="112.0" prefWidth="725.0" style="-fx-background-color: #d5c5ae;">
-               <children>
-                  <Label prefHeight="110.0" prefWidth="581.0" text="SHOW SUBSCRIBER RENTALS">
-                     <font>
-                        <Font name="Agency FB" size="39.0" />
-                     </font>
-                  </Label>
-                  <ImageView blendMode="COLOR_DODGE" cache="true" cacheHint="SPEED" fitHeight="90.0" fitWidth="90.0" opacity="0.6" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/icons/simple_right_arrow.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </HBox>
-         </children>
-      </AnchorPane>
+      <AnchorPane fx:id="borderCenter" prefHeight="649.0" prefWidth="803.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

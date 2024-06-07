@@ -25,6 +25,12 @@ public class Book extends Identifiable<Long> {
     public Book() {
     }
 
+    public Book(BookInfo bookInfo, String uniqueCode, StateOfRental state) {
+        this.bookInfo = bookInfo;
+        this.uniqueCode = uniqueCode;
+        this.state = state;
+    }
+
     public BookInfo getBookInfo() {
         return bookInfo;
     }

@@ -5,15 +5,21 @@ import jakarta.persistence.Column;
 import java.util.Objects;
 
 public class CredentialsDTO extends Credentials{
-    private String type;
+    private String type="";
     public CredentialsDTO(Credentials credentials, String type) {
         super(credentials.getUsername(), credentials.getPassword(), credentials.getEmail(), credentials.getSeed());
         this.type = type;
+        this.setId(credentials.getId());
     }
 
     public CredentialsDTO(String username, String password, String email, String seed, String type) {
         super(username, password, email, seed);
         this.type = type;
+    }
+
+    public CredentialsDTO(Credentials credentials) {
+        super(credentials.getUsername(), credentials.getPassword(), credentials.getEmail(), credentials.getSeed());
+
     }
 
     public String getType() {
@@ -46,3 +52,5 @@ public class CredentialsDTO extends Credentials{
                 "} " + super.toString();
     }
 }
+
+

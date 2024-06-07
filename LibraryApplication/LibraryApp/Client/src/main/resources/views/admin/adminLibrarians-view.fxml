@@ -12,18 +12,17 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="696.0" prefWidth="895.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.libraryapp.Controller.admin.AdminLibrariansController">
+<AnchorPane prefHeight="696.0" prefWidth="895.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.ViewControllers.admin.AdminLibrariansController">
    <children>
-      <TableView layoutX="29.0" layoutY="102.0" prefHeight="368.0" prefWidth="861.0">
+      <TableView fx:id="tblLibrarian" layoutX="29.0" layoutY="102.0" prefHeight="368.0" prefWidth="861.0">
          <columns>
-            <TableColumn prefWidth="111.33328247070312" text="COD" />
-            <TableColumn prefWidth="134.0" text="DATE_EMPLOYMENT" />
-            <TableColumn prefWidth="89.33331298828125" text="LAST_NAME" />
-            <TableColumn prefWidth="113.33331298828125" text="FIRST_NAME" />
-            <TableColumn prefWidth="143.3333740234375" text="CPN" />
-            <TableColumn prefWidth="143.99993896484375" text="USERNAME" />
-            <TableColumn prefWidth="123.99995930989587" text="EMAIL" />
+            <TableColumn fx:id="colCod" prefWidth="111.33328247070312" text="COD" />
+            <TableColumn fx:id="colEmployment" prefWidth="134.0" text="DATE_EMPLOYMENT" />
+            <TableColumn fx:id="colLName" prefWidth="89.33331298828125" text="LAST_NAME" />
+            <TableColumn fx:id="colFName" prefWidth="113.33331298828125" text="FIRST_NAME" />
+            <TableColumn fx:id="colCPN" prefWidth="143.3333740234375" text="CPN" />
+            <TableColumn fx:id="colUsername" prefWidth="143.99993896484375" text="USERNAME" />
+            <TableColumn fx:id="colEmail" prefWidth="123.99995930989587" text="EMAIL" />
          </columns>
       </TableView>
       <Label layoutX="46.0" layoutY="24.0" prefHeight="66.0" prefWidth="385.0" text="MANAGE LIBRARIANS">
@@ -42,7 +41,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="244.0" />
+                        <TextField fx:id="txtUsername" prefHeight="25.0" prefWidth="244.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="29.0" prefWidth="235.0">
@@ -52,7 +51,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="244.0" />
+                        <TextField fx:id="txtEmail" prefHeight="25.0" prefWidth="244.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="29.0" prefWidth="235.0">
@@ -62,7 +61,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="244.0" />
+                        <TextField fx:id="txtLName" prefHeight="25.0" prefWidth="244.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="29.0" prefWidth="235.0">
@@ -72,7 +71,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="244.0" />
+                        <TextField fx:id="txtFName" prefHeight="25.0" prefWidth="244.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="29.0" prefWidth="235.0">
@@ -82,7 +81,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="244.0" />
+                        <TextField fx:id="txtCPN" prefHeight="25.0" prefWidth="244.0" />
                      </children>
                   </HBox>
                </children>
@@ -97,7 +96,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="244.0" />
+                        <TextField fx:id="txtGender" prefHeight="25.0" prefWidth="244.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="29.0" prefWidth="235.0">
@@ -107,7 +106,7 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="244.0" />
+                        <TextField fx:id="txtAddress" prefHeight="25.0" prefWidth="244.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="29.0" prefWidth="235.0">
@@ -117,30 +116,30 @@
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <TextField prefHeight="25.0" prefWidth="244.0" />
+                        <TextField fx:id="txtPhone" prefHeight="25.0" prefWidth="244.0" />
                      </children>
                   </HBox>
-                  <HBox prefHeight="29.0" prefWidth="235.0">
+                  <HBox fx:id="txtBDay" prefHeight="29.0" prefWidth="235.0">
                      <children>
                         <Label prefHeight="41.0" prefWidth="85.0" text="BIRTHDAY:">
                            <font>
                               <Font name="Agency FB" size="16.0" />
                            </font>
                         </Label>
-                        <DatePicker prefHeight="25.0" prefWidth="245.0" />
+                        <DatePicker fx:id="txtBirthday" prefHeight="25.0" prefWidth="245.0" />
                      </children>
                   </HBox>
                </children>
             </VBox>
          </children>
       </HBox>
-      <Button layoutX="740.0" layoutY="514.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="105.0" text="DELETE" />
+      <Button fx:id="btnDelete" layoutX="740.0" layoutY="514.0" mnemonicParsing="false" onAction="#handleDeleteLibrarian" prefHeight="40.0" prefWidth="105.0" text="DELETE" />
       <Label layoutX="23.0" layoutY="482.0" text="ADD/MODIFY/VIEW LIBRARIAN">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Button layoutX="740.0" layoutY="572.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="105.0" text="ADD" />
-      <Button layoutX="740.0" layoutY="630.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="105.0" text="MODIFY" />
+      <Button fx:id="btnAdd" layoutX="740.0" layoutY="572.0" mnemonicParsing="false" onAction="#handleAddLibrarian" prefHeight="40.0" prefWidth="105.0" text="ADD" />
+      <Button fx:id="btnModify" layoutX="740.0" layoutY="630.0" mnemonicParsing="false" onAction="#handleModifyLibrarian" prefHeight="40.0" prefWidth="105.0" text="MODIFY" />
    </children>
 </AnchorPane>
